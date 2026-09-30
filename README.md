@@ -8,6 +8,7 @@
 - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+    - [Docker](#docker)
     - [Supported Drivers](#supported-drivers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -95,6 +96,20 @@ You can then see a live running version of the application running on your local
 can be changed in the `cmd/web_server.go` file. For now there is no requirement for any environment variables
 or setup. This may be added in the future, but for now, the project is simple enough to run without any setup 
 (assuming port 3001 is available).
+
+### Docker
+
+Published images are available from the GitHub Container Registry:
+
+```bash
+docker run --rm -p 3001:3001 ghcr.io/haydenhargreaves/web-database-viewer:latest
+```
+
+The application is available at `http://localhost:3001/v1/web/view`. Its health endpoint is
+`http://localhost:3001/v1/api/status`.
+
+Pull requests build and smoke-test the image without publishing it. Pushes to `master` publish `latest` and
+an immutable commit-SHA tag. Semantic version tags, for example `v1.0.0`, additionally publish version tags.
 
 
 ### Supported Drivers
