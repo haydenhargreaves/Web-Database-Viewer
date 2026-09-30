@@ -127,3 +127,18 @@ for (const key in input) {
     }
   }
 }
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Tab" || event.target.id !== "sql") {
+    return;
+  }
+
+  event.preventDefault();
+
+  const sql = event.target;
+  const start = sql.selectionStart;
+  const end = sql.selectionEnd;
+  sql.value = `${sql.value.slice(0, start)}\t${sql.value.slice(end)}`;
+  sql.selectionStart = start + 1;
+  sql.selectionEnd = start + 1;
+});

@@ -27,8 +27,7 @@ func QueryCurrent(c *gin.Context) {
 	queries := strings.Split(query, ";")
 	var results []string
 	for _, query := range queries {
-		// Some goofy skill issue with MySQL
-		// This is REQUIRED to prevent errors from the split
+		query = strings.TrimSpace(query)
 		if query == "" {
 			continue
 		}
@@ -45,7 +44,7 @@ func QueryCurrent(c *gin.Context) {
 }
 
 func queryConnection(query, url, driver string) ([]string, []map[string]interface{}, error) {
-	db, err := sql.Open(driver, url)
+	db, err := sql.Open(sqlDriver(driver), url)
 	if err != nil {
 		return []string{}, []map[string]interface{}{}, err
 	}

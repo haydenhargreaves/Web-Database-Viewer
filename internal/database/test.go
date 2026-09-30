@@ -24,21 +24,18 @@ const CONNECTION_FAILURE string = `
 
 // Test a connection to a database
 func TestConnectionURL(c *gin.Context) {
-	var driver string = c.PostForm("db-driver")
-	switch c.PostForm("db-driver") {
+	driver := c.PostForm("db-driver")
+	switch driver {
 	case "postgres":
-		driver = "postgres"
 	case "mysql", "mariadb":
-		driver = "mysql"
 	case "sqlite3":
-		driver = "sqlite3"
 	default:
 		c.String(200, fmt.Sprintf(CONNECTION_FAILURE, "Unsupported driver"))
 		return
 	}
 
 	// Open connection
-	conn, err := sql.Open(driver, c.PostForm("db-url"))
+	conn, err := sql.Open(sqlDriver(driver), c.PostForm("db-url"))
 	if err != nil {
 		fmt.Println(err)
 		c.String(200, fmt.Sprintf(CONNECTION_FAILURE, err.Error()))

@@ -48,7 +48,7 @@ func TableTree(c *gin.Context) string {
 
 // Generate the tree of the database tables
 func generateTableTree(url, driver string) (map[string][]model.Column, error) {
-	conn, err := sql.Open(driver, url)
+	conn, err := sql.Open(sqlDriver(driver), url)
 	if err != nil {
 		return map[string][]model.Column{}, err
 	}
@@ -256,7 +256,7 @@ func EnumTree(c *gin.Context) string {
 // Generate the tree of the database enums and their values from a
 // provided connection URL.
 func genereteEnumTree(url, driver string) (map[string][]string, error) {
-	conn, err := sql.Open(driver, url)
+	conn, err := sql.Open(sqlDriver(driver), url)
 	if err != nil {
 		return nil, err
 	}
