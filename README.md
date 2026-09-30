@@ -125,9 +125,9 @@ the full range of features.
 - MySQL
 - MariaDB
 - SQLite3
+- SQL Server
 
 **Partially Supported Drivers:**
-- SQL Server
 - Oracle
 - DB2
 

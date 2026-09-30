@@ -29,6 +29,7 @@ func TestConnectionURL(c *gin.Context) {
 	case "postgres":
 	case "mysql", "mariadb":
 	case "sqlite3":
+	case "sqlserver":
 	default:
 		c.String(200, fmt.Sprintf(CONNECTION_FAILURE, "Unsupported driver"))
 		return

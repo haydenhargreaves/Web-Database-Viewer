@@ -14,6 +14,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/microsoft/go-mssqldb"
 )
 
 // Return an HTML string with the contents of the database tables
@@ -77,6 +78,8 @@ func tableList(conn *sql.DB, driver string) (map[string][]model.Column, error) {
 		q = query.GET_TABLE_LIST_MYSQL
 	case "sqlite3":
 		q = query.GET_TABLE_LIST_SQLITE
+	case "sqlserver":
+		q = query.GET_TABLE_LIST_MSSQL
 	default:
 		return map[string][]model.Column{}, errors.New("Table List: Unsupported driver")
 	}
@@ -125,6 +128,13 @@ func fillColumns(conn *sql.DB, driver string, tree map[string][]model.Column) er
 			query.GET_TABLE_FKS_SQLITE,
 			query.GET_TABLE_RESTRAINS_SQLITE,
 			query.GET_TABLE_UNIQUE_COLS_SQLITE,
+		}
+	case "sqlserver":
+		qs = [4]string{
+			query.GET_TABLE_PK_MSSQL,
+			query.GET_TABLE_FKS_MSSQL,
+			query.GET_TABLE_RESTRAINS_MSSQL,
+			query.GET_TABLE_UNIQUE_COLS_MSSQL,
 		}
 	default:
 		return errors.New("Table Columns: Unsupported driver")
@@ -277,7 +287,7 @@ func enumList(conn *sql.DB, driver string) (map[string][]string, error) {
 	switch driver {
 	case "postgres":
 		q = query.GET_ENUM_LIST_PSQL
-	case "mysql", "mariadb", "sqlite3":
+	case "mysql", "mariadb", "sqlite3", "sqlserver":
 		return map[string][]string{}, errors.New(fmt.Sprintf("%s does not support enum tree display.", driver))
 	default:
 		return map[string][]string{}, errors.New("Enum List: Unsupported driver")
