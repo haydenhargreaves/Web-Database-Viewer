@@ -13,8 +13,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-	_ "github.com/microsoft/go-mssqldb"
+	mssql "github.com/microsoft/go-mssqldb"
 )
+
+const maxQueryRows = 500
 
 func QueryCurrent(c *gin.Context) {
 	query := c.PostForm("sql")
@@ -32,34 +34,38 @@ func QueryCurrent(c *gin.Context) {
 		if query == "" {
 			continue
 		}
-		cols, data, err := queryConnection(query, conn, driver)
+		cols, data, truncated, err := queryConnection(query, conn, driver)
 		if err != nil {
 			c.String(200, templates.ErrorQueryResults(err))
 			return
 		}
 
-		results = append(results, templates.QueryResult(cols, data))
+		results = append(results, templates.QueryResult(cols, data, truncated))
 	}
 
 	c.String(200, templates.ConcatResults(results))
 }
 
-func queryConnection(query, url, driver string) ([]string, []map[string]interface{}, error) {
+func queryConnection(query, url, driver string) ([]string, []map[string]interface{}, bool, error) {
 	db, err := sql.Open(sqlDriver(driver), url)
 	if err != nil {
-		return []string{}, []map[string]interface{}{}, err
+		return []string{}, []map[string]interface{}{}, false, err
 	}
 	defer db.Close()
 
 	rows, err := db.Query(query)
 	if err != nil {
-		return []string{}, []map[string]interface{}{}, err
+		return []string{}, []map[string]interface{}{}, false, err
 	}
 	defer rows.Close()
 
 	cols, err := rows.Columns()
 	if err != nil {
-		return []string{}, []map[string]interface{}{}, err
+		return []string{}, []map[string]interface{}{}, false, err
+	}
+	columnTypes, err := rows.ColumnTypes()
+	if err != nil {
+		return []string{}, []map[string]interface{}{}, false, err
 	}
 
 	// Create values pointer and value pointer slices
@@ -70,15 +76,25 @@ func queryConnection(query, url, driver string) ([]string, []map[string]interfac
 	valuePtrs := make([]interface{}, len(cols))
 
 	for i := range cols {
-		valuePtrs[i] = &values[i]
+		if isUniqueIdentifier(driver, columnTypes[i].DatabaseTypeName()) {
+			valuePtrs[i] = &mssql.NullUniqueIdentifier{}
+		} else {
+			valuePtrs[i] = &values[i]
+		}
 	}
 
 	// Final data structure to store the results
 	// An array of maps, where each map is a row
 	// and the keys are the column names.
 	var result []map[string]interface{}
+	truncated := false
 
 	for rows.Next() {
+		if len(result) == maxQueryRows {
+			truncated = true
+			break
+		}
+
 		// Scan the result into the value pointers
 		err := rows.Scan(valuePtrs...)
 		if err != nil {
@@ -89,18 +105,10 @@ func queryConnection(query, url, driver string) ([]string, []map[string]interfac
 		row := make(map[string]interface{})
 		for i, col := range cols {
 			var v interface{}
-			val := values[i]
-
-			// Convert the value to a string representation
-			// I can't see when this would fail and return
-			// something that isn't a string, but it's better
-			// to be safe than sorry. However, this might be
-			// hard to handle in the frontend.
-			b, ok := val.([]byte)
-			if ok {
-				v = string(b)
+			if guid, ok := valuePtrs[i].(*mssql.NullUniqueIdentifier); ok {
+				v = uniqueIdentifierValue(guid)
 			} else {
-				v = val
+				v = queryValue(values[i])
 			}
 
 			row[col] = v
@@ -110,7 +118,31 @@ func queryConnection(query, url, driver string) ([]string, []map[string]interfac
 		result = append(result, row)
 	}
 
-	return cols, result, nil
+	if err := rows.Err(); err != nil {
+		return []string{}, []map[string]interface{}{}, false, err
+	}
+
+	return cols, result, truncated, nil
+}
+
+func isUniqueIdentifier(driver, databaseType string) bool {
+	return driver == "sqlserver" && strings.EqualFold(databaseType, "UNIQUEIDENTIFIER")
+}
+
+func uniqueIdentifierValue(guid *mssql.NullUniqueIdentifier) interface{} {
+	if !guid.Valid {
+		return nil
+	}
+
+	return guid.UUID.String()
+}
+
+func queryValue(value interface{}) interface{} {
+	if bytes, ok := value.([]byte); ok {
+		return string(bytes)
+	}
+
+	return value
 }
 
 func getConnection(c *gin.Context) (url, driver string) {

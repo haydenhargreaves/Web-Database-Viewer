@@ -8,6 +8,12 @@ const TABLE_TREE_ERROR_BODY string = `
 	</li>
 `
 
+const TABLE_FIELDS_ERROR_BODY string = `
+	<li class="py-2">
+		<p class="text-xs text-red-500">Error Loading Table: %s</p>
+	</li>
+`
+
 const ENUM_TREE_ERROR_BODY string = `
 	<li class="py-2">
 		<p class="text-xs text-red-500">Error Loading Tables: %s</p>
@@ -20,6 +26,11 @@ func TableTreeError(err error) string {
 	var html string = TABLE_TREE_OPEN
 	html += fmt.Sprintf(TABLE_TREE_ERROR_BODY, err.Error())
 	return html + TABLE_TREE_CLOSE
+}
+
+// TableFieldsError returns an error suitable for insertion into one table's field list.
+func TableFieldsError(err error) string {
+	return fmt.Sprintf(TABLE_FIELDS_ERROR_BODY, err.Error())
 }
 
 // When an error occurs while generating the enum tree,

@@ -24,7 +24,7 @@
           hx-target="#connected-database" hx-indicator="#table-loading" hx-encoding="multipart/form-data"
           class="flex items-center justify-end space-x-2 flex-wrap">
           <label for="connected-database" class="block text-sm font-medium text-gray-700">Connected Database:</label>
-          <select hx-get="/v1/web/connections" hx-trigger="load, change" hx-swap="outerHTML" id="connected-database"
+          <select hx-get="/v1/web/connections" hx-trigger="load" hx-swap="outerHTML" id="connected-database"
             name="connected-database" hx-params="none"
             class="mt-1 block p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"></select>
         </form>
@@ -38,9 +38,9 @@
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row flex-grow">
+    <div class="flex flex-col md:flex-row flex-grow min-h-0">
       <!-- Sidebar -->
-      <div class="w-full md:w-1/4 bg-white shadow-md">
+      <div class="w-full md:w-1/4 bg-white shadow-md md:flex md:flex-col md:min-h-0">
         <div class="p-4 border-b flex justify-between items-center">
           <h2 class="text-lg font-bold">
             <span id="database-name-tree">database</span>
@@ -56,27 +56,33 @@
             </svg>
           </button>
         </div>
-        <div class="p-4 max-h-full" hx-get="/v1/web/connections/tree/table" hx-trigger="load" hx-params="none"
-          hx-indicator="#table-loading" hx-target="#database-table-tree">
-          <div class="w-full flex items-center justify-between border-b pb-4 pt-2">
-            <h2 class="text-lg text-gray-700">Tables</h2>
-            <p id="table-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+        <div class="md:flex-1 md:min-h-0 md:overflow-y-auto">
+          <div class="p-4" hx-get="/v1/web/connections/tree/table" hx-trigger="load" hx-params="none"
+            hx-indicator="#table-loading" hx-target="#database-table-tree">
+            <div class="w-full flex items-center justify-between border-b pb-4 pt-2">
+              <h2 class="text-lg text-gray-700">Tables</h2>
+              <p id="table-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </div>
+            <label for="table-search" class="sr-only">Search tables</label>
+            <input id="table-search" type="search" placeholder="Search tables" oninput="FilterTables(this.value);"
+              class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <ul hx-swap-oob="outerHTML" id="database-table-tree" class="mt-4 space-y-2"></ul>
+            <p id="table-search-empty" class="hidden mt-4 text-sm text-gray-500">No matching tables.</p>
           </div>
-          <ul hx-swap-oob="outerHTML" id="database-table-tree" class="space-y-2"></ul>
-        </div>
 
-        <div class="p-4 max-h-full" hx-get="/v1/web/connections/tree/enum" hx-trigger="load" hx-params="none"
-          hx-indicator="#enum-loading" hx-target="#database-enum-tree">
-          <div class="w-full flex items-center justify-between border-b pb-4 pt-2">
-            <h2 class="text-lg text-gray-700">Enums</h2>
-            <p id="enum-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+          <div class="p-4" hx-get="/v1/web/connections/tree/enum" hx-trigger="load" hx-params="none"
+            hx-indicator="#enum-loading" hx-target="#database-enum-tree">
+            <div class="w-full flex items-center justify-between border-b pb-4 pt-2">
+              <h2 class="text-lg text-gray-700">Enums</h2>
+              <p id="enum-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </div>
+            <ul hx-swap-oob="outerHTML" id="database-enum-tree" class="mt-4 space-y-2"></ul>
           </div>
-          <ul hx-swap-oob="outerHTML" id="database-enum-tree" class="space-y-2"></ul>
         </div>
       </div>
 
       <!-- Main Content -->
-      <div class="w-full md:w-3/4 p-4">
+      <div class="w-full md:w-3/4 p-4 md:min-h-0 md:overflow-y-auto">
         <main>
           <!-- Query Input -->
           <div id="query-main" class="mb-4">

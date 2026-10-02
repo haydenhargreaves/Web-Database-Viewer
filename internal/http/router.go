@@ -69,6 +69,9 @@ func populate(web, api *gin.RouterGroup) {
 	web.GET("/connections/tree/table", func(c *gin.Context) {
 		c.String(200, database.TableTree(c))
 	})
+	web.GET("/connections/tree/table/columns", func(c *gin.Context) {
+		c.String(200, database.TableColumns(c))
+	})
 	web.GET("/connections/tree/enum", func(c *gin.Context) {
 		c.String(200, database.EnumTree(c))
 	})

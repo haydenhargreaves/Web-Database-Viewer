@@ -44,3 +44,48 @@ function ToggleEnumValues(id) {
     button_svg.setAttribute("transform", "rotate(-90)");
   }
 }
+
+function FilterTables(query) {
+  const normalizedQuery = query.trim().toLowerCase();
+  const tables = document.querySelectorAll("#database-table-tree > li[data-table-name]");
+  let matches = 0;
+
+  tables.forEach((table) => {
+    const matchesQuery = FuzzyMatches(table.dataset.tableName.toLowerCase(), normalizedQuery);
+    table.classList.toggle("hidden", !matchesQuery);
+    if (matchesQuery) {
+      matches += 1;
+    }
+  });
+
+  const emptyMessage = document.getElementById("table-search-empty");
+  emptyMessage.classList.toggle("hidden", normalizedQuery === "" || matches > 0);
+}
+
+function FuzzyMatches(tableName, query) {
+  let queryIndex = 0;
+
+  for (const character of tableName) {
+    if (character === query[queryIndex]) {
+      queryIndex += 1;
+    }
+  }
+
+  return queryIndex === query.length;
+}
+
+function ResetTableSearch() {
+  const search = document.getElementById("table-search");
+  if (!search) {
+    return;
+  }
+
+  search.value = "";
+  FilterTables("");
+}
+
+document.addEventListener("htmx:afterSettle", (event) => {
+  if (event.detail.xhr.responseText.includes('id="database-table-tree"')) {
+    ResetTableSearch();
+  }
+});

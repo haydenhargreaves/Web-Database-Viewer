@@ -32,6 +32,7 @@ const table_body_row string = `<td class="px-6 py-4 whitespace-nowrap">%v</td>`
 // Error message
 const query_error_message string = `<p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm">Query Error: %s</p>`
 const query_error_message_blank string = `<p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm hidden"></p>`
+const query_row_limit_warning string = `<p class="text-yellow-500 px-6 py-3 text-sm">Showing first 500 rows, please use a more specific query to prevent crashing the application.</p>`
 
 func ErrorQueryResults(e error) string {
 	return fmt.Sprintf(query_error_message, e.Error()) + result_list_open + result_list_close
@@ -47,7 +48,7 @@ func ConcatResults(items []string) string {
 	return html + result_list_close
 }
 
-func QueryResult(cols []string, rows []map[string]interface{}) string {
+func QueryResult(cols []string, rows []map[string]interface{}, truncated bool) string {
 	var head string = generateHead(cols)
 
 	body := table_body_open
@@ -57,7 +58,12 @@ func QueryResult(cols []string, rows []map[string]interface{}) string {
 
 	body += table_body_close
 
-	return fmt.Sprintf(result_item, table_open+head+body+table_close)
+	result := table_open + head + body + table_close
+	if truncated {
+		result = query_row_limit_warning + result
+	}
+
+	return fmt.Sprintf(result_item, result)
 }
 
 // Generate the tables head row

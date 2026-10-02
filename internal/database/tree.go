@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/Azpect3120/Web-Database-Viewer/internal/model"
 	"github.com/Azpect3120/Web-Database-Viewer/internal/query"
@@ -47,7 +48,7 @@ func TableTree(c *gin.Context) string {
 	return templates.TableTree(tree)
 }
 
-// Generate the tree of the database tables
+// Generate the tree of database table names. Column metadata is loaded on demand.
 func generateTableTree(url, driver string) (map[string][]model.Column, error) {
 	conn, err := sql.Open(sqlDriver(driver), url)
 	if err != nil {
@@ -60,11 +61,40 @@ func generateTableTree(url, driver string) (map[string][]model.Column, error) {
 		return map[string][]model.Column{}, err
 	}
 
-	if err := fillColumns(conn, driver, tree); err != nil {
-		return map[string][]model.Column{}, err
+	return tree, nil
+}
+
+// TableColumns returns the metadata for a single table in the current connection.
+func TableColumns(c *gin.Context) string {
+	table := c.Query("table")
+	if table == "" {
+		return templates.TableFieldsError(errors.New("No table selected"))
 	}
 
-	return tree, nil
+	session := sessions.Default(c)
+	connectionsBytes, ok := session.Get("connections").([]byte)
+	current, ok := session.Get("current").(string)
+	if !ok {
+		return templates.TableFieldsError(errors.New("No connections found"))
+	}
+
+	var connections map[string][2]string
+	if err := json.Unmarshal(connectionsBytes, &connections); err != nil {
+		return templates.TableFieldsError(err)
+	}
+
+	conn, err := sql.Open(sqlDriver(connections[current][1]), connections[current][0])
+	if err != nil {
+		return templates.TableFieldsError(err)
+	}
+	defer conn.Close()
+
+	columns, err := tableColumns(conn, connections[current][1], table)
+	if err != nil {
+		return templates.TableFieldsError(err)
+	}
+
+	return templates.TableFields(table, columns)
 }
 
 // Return a map with the keys being the table names and the values
@@ -102,10 +132,8 @@ func tableList(conn *sql.DB, driver string) (map[string][]model.Column, error) {
 	return tree, nil
 }
 
-// Fill the columns of the tables in the tree using the keys found
-// in the tableList function.
-func fillColumns(conn *sql.DB, driver string, tree map[string][]model.Column) error {
-	// Pick the correct array of queries to use based on the driver
+// tableQueries returns the metadata queries for one table.
+func tableQueries(driver string) ([4]string, error) {
 	var qs [4]string
 	switch driver {
 	case "postgres":
@@ -137,103 +165,91 @@ func fillColumns(conn *sql.DB, driver string, tree map[string][]model.Column) er
 			query.GET_TABLE_UNIQUE_COLS_MSSQL,
 		}
 	default:
-		return errors.New("Table Columns: Unsupported driver")
+		return qs, errors.New("Table Columns: Unsupported driver")
 	}
 
-	var pkey string
-	var fkeys []model.ForeignKey
-	for table := range tree {
-		unique, err := getUniqueColumns(conn, table, qs[3])
-		if err != nil {
-			return err
-		}
-
-		// Get the primary key of the table
-		pk, err := conn.Query(fmt.Sprintf(qs[0], table))
-		if err != nil {
-			return err
-		}
-		defer pk.Close()
-		for pk.Next() {
-			if err := pk.Scan(&pkey); err != nil {
-				return err
-			}
-		}
-
-		// Get the foreign keys of the table
-		fk, err := conn.Query(fmt.Sprintf(qs[1], table))
-		if err != nil {
-			return err
-		}
-		defer fk.Close()
-		for fk.Next() {
-			var fkey model.ForeignKey
-			if err := fk.Scan(new(interface{}), new(interface{}), &fkey.Column, new(interface{}), &fkey.ForeignTable, &fkey.ForeignColumn); err != nil {
-				return err
-			}
-			fkeys = append(fkeys, fkey)
-		}
-
-		// Get the restraints of the table
-		rows, err := conn.Query(fmt.Sprintf(qs[2], table))
-		if err != nil {
-			return err
-		}
-		defer rows.Close()
-
-		for rows.Next() {
-			var (
-				column   model.Column
-				enumType sql.NullString
-			)
-			if err := rows.Scan(&column.Name, &column.Nullable, &column.Type, &column.MaxLength, &enumType); err != nil {
-				return err
-			}
-			if column.Type == "USER-DEFINED" {
-				column.Type = enumType.String
-			}
-			if column.Name == pkey {
-				column.PrimaryKey = true
-			}
-			for _, fkey := range fkeys {
-				if column.Name == fkey.Column {
-					column.ForeignKey = fkey
-				} else {
-					column.ForeignKey = model.ForeignKey{}
-				}
-			}
-
-			for _, u := range unique {
-				if column.Name == u {
-					column.Unique = true
-				}
-			}
-
-			tree[table] = append(tree[table], column)
-		}
-	}
-
-	return nil
+	return qs, nil
 }
 
-// Returns a list of the unique columns in a table
-func getUniqueColumns(conn *sql.DB, table string, query string) ([]string, error) {
-	var cols []string
-	rows, err := conn.Query(fmt.Sprintf(query, table))
+// tableColumns returns all metadata required to display one table's columns.
+func tableColumns(conn *sql.DB, driver, table string) ([]model.Column, error) {
+	qs, err := tableQueries(driver)
 	if err != nil {
-		return []string{}, err
+		return nil, err
+	}
+
+	table = strings.ReplaceAll(table, "'", "''")
+
+	unique := make(map[string]bool)
+	rows, err := conn.Query(fmt.Sprintf(qs[3], table))
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var column string
+		if err := rows.Scan(&column); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		unique[column] = true
+	}
+	rows.Close()
+
+	primaryKeys := make(map[string]bool)
+	rows, err = conn.Query(fmt.Sprintf(qs[0], table))
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var column string
+		if err := rows.Scan(&column); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		primaryKeys[column] = true
+	}
+	rows.Close()
+
+	foreignKeys := make(map[string]model.ForeignKey)
+	rows, err = conn.Query(fmt.Sprintf(qs[1], table))
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var foreignKey model.ForeignKey
+		if err := rows.Scan(new(interface{}), new(interface{}), &foreignKey.Column, new(interface{}), &foreignKey.ForeignTable, &foreignKey.ForeignColumn); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		foreignKeys[foreignKey.Column] = foreignKey
+	}
+	rows.Close()
+
+	rows, err = conn.Query(fmt.Sprintf(qs[2], table))
+	if err != nil {
+		return nil, err
 	}
 	defer rows.Close()
 
+	columns := make([]model.Column, 0)
 	for rows.Next() {
-		var col string
-		if err := rows.Scan(&col); err != nil {
-			return []string{}, err
+		var (
+			column   model.Column
+			enumType sql.NullString
+		)
+		if err := rows.Scan(&column.Name, &column.Nullable, &column.Type, &column.MaxLength, &enumType); err != nil {
+			return nil, err
 		}
-		cols = append(cols, col)
+		if column.Type == "USER-DEFINED" {
+			column.Type = enumType.String
+		}
+		column.PrimaryKey = primaryKeys[column.Name]
+		column.ForeignKey = foreignKeys[column.Name]
+		column.Unique = unique[column.Name]
+		columns = append(columns, column)
 	}
 
-	return cols, nil
+	return columns, nil
 }
 
 // Generate the tree of the database enums and their values

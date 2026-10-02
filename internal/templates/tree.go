@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"net/url"
 	"sort"
 
 	"github.com/Azpect3120/Web-Database-Viewer/internal/model"
@@ -10,18 +11,19 @@ import (
 // Table tree definition
 const TABLE_TREE_OPEN string = `<ul hx-swap-oob="outerHTML" id="database-table-tree" class="space-y-2">`
 const TABLE_TREE_CLOSE string = `</ul>`
-const TABLE_TREE_BODY_TEMPLATE string = `<li>%s</li>`
+const TABLE_TREE_BODY_TEMPLATE string = `<li data-table-name="%s">%s</li>`
 
 // Table definition
 const TABLE_TEMPLATE string = `
-	<button class="w-full text-left text-gray-700 font-medium hover:bg-gray-100 p-2 rounded flex items-center">
+	<button hx-get="/v1/web/connections/tree/table/columns?table=%s" hx-trigger="click once" hx-target="#fields-%s" hx-swap="innerHTML" hx-indicator="#table-loading-%s" class="w-full text-left text-gray-700 font-medium hover:bg-gray-100 p-2 rounded flex items-center justify-between">
 		<svg onclick="ToggleFields('%s');" id="icon-%s" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
 		</svg>
 		<span class="hover:underline w-full" title="Select this table" onclick="ToggleFields('%s');">%s</span>
-		<svg class="w-8 h-8 ml-auto p-2 rounded-full hover:bg-gray-300 transition:all duration-150" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" onclick="LoadTableQuery('%s');">
+		<svg class="w-8 h-8 ml-auto p-2 rounded-full hover:bg-gray-300 transition:all duration-150" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" onclick="event.stopPropagation(); LoadTableQuery('%s');">
 			<path d="M464 428L339.92 303.9a160.48 160.48 0 0030.72-94.58C370.64 120.37 298.27 48 209.32 48S48 120.37 48 209.32s72.37 161.32 161.32 161.32a160.48 160.48 0 0094.58-30.72L428 464zM209.32 319.69a110.38 110.38 0 11110.37-110.37 110.5 110.5 0 01-110.37 110.37z"/>
 		</svg>
+		<span id="table-loading-%s" class="htmx-indicator text-xs text-gray-500">Loading...</span>
 	</button>
 	`
 
@@ -79,13 +81,19 @@ func TableTree(tree map[string][]model.Column) string {
 
 	var body string
 	for _, table := range getSortedKeys(tree) {
-		body += fmt.Sprintf(TABLE_TEMPLATE, table, table, table, table, table)
+		tableBody := fmt.Sprintf(TABLE_TEMPLATE, url.QueryEscape(table), table, table, table, table, table, table, table, table)
 		fields := fmt.Sprintf(TABLE_FIELDS_LIST_OPEN, table)
-		body += fields + generateFields(table, tree[table]) + TABLE_FIELDS_LIST_CLOSE
+		tableBody += fields + TABLE_FIELDS_LIST_CLOSE
+		body += fmt.Sprintf(TABLE_TREE_BODY_TEMPLATE, table, tableBody)
 	}
 
-	html += fmt.Sprintf(TABLE_TREE_BODY_TEMPLATE, body)
+	html += body
 	return html + TABLE_TREE_CLOSE
+}
+
+// TableFields generates the HTML inserted when a table is expanded.
+func TableFields(table string, fields []model.Column) string {
+	return generateFields(table, fields)
 }
 
 // Using a list of fields, generate the HTML for the fields

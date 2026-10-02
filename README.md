@@ -59,7 +59,7 @@ with interaction powered by [HTMX](https://htmx.org), and styled with [Tailwind 
 
 If you wish to make changes to this project, you will need the following installed on your machine:
 
-- [GoLang](https://go.dev) Version 1.16 or higher (built with 1.22.5)
+- [GoLang](https://go.dev) Version 1.16 or higher (built with 1.25.7)
 - [Tailwind CSS](https://tailwindcss.com) (for styling)
 
 If you wish to run this project locally, without any changes, you will not need anything other than 
@@ -121,7 +121,7 @@ have all features available to them. Partially supported drivers will have some 
 the full range of features.
 
 **Fully Supported Drivers:**
-- PostgreSQL
+- PostgreSQL (enum tree supported)
 - MySQL
 - MariaDB
 - SQLite3
