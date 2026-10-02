@@ -67,6 +67,7 @@ func CreateConnection(c *gin.Context) {
 	html := templates.ConnectionsList(connections, name)
 	html += TableTree(c)
 	html += EnumTree(c)
+	html += RoutineTree(c)
 
 	c.String(200, html)
 }

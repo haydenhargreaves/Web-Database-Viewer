@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"html"
 	"net/url"
 	"sort"
 
@@ -41,6 +42,21 @@ const TABLE_FIELD_TEMPLATE string = `
 			<span>%s</span>
 			<span class="text-xs ml-auto">%s</span>
 		</button>
+	</li>
+`
+
+// Routine tree definition
+const ROUTINE_TREE_BODY_OPEN string = `<ul hx-swap-oob="outerHTML" id="database-routine-tree" class="mt-4 space-y-2">`
+const ROUTINE_TREE_CLOSE string = `</ul>`
+const ROUTINE_TEMPLATE string = `
+	<li data-routine-name="%s">
+		<div class="w-full text-left text-gray-700 font-medium hover:bg-gray-100 p-2 rounded flex items-center justify-between">
+			<span class="w-full truncate" title="%s">%s</span>
+			<span class="text-xs uppercase text-gray-500 mr-2">%s</span>
+			<button type="button" title="Load routine definition" data-routine-id="%s" data-routine-name="%s" data-routine-kind="%s" onclick="LoadRoutineDefinition(this);" class="w-8 h-8 p-2 rounded-full hover:bg-gray-300 transition-all duration-150">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><path d="M160 368L32 256l128-112v64h128v96H160v64zm192-224v64h128v96H352v64l128-112-128-112z"/></svg>
+			</button>
+		</div>
 	</li>
 `
 
@@ -103,6 +119,24 @@ func generateFields(table string, fields []model.Column) string {
 		html += fmt.Sprintf(TABLE_FIELD_TEMPLATE, table, field.Name, field.Name, generateType(field))
 	}
 	return html
+}
+
+// RoutineTree generates the stored procedure and function list.
+func RoutineTree(routines []model.Routine) string {
+	output := ROUTINE_TREE_BODY_OPEN
+	for _, routine := range routines {
+		output += fmt.Sprintf(
+			ROUTINE_TEMPLATE,
+			html.EscapeString(routine.Signature),
+			html.EscapeString(routine.Signature),
+			html.EscapeString(routine.Signature),
+			html.EscapeString(routine.Kind),
+			html.EscapeString(routine.ID),
+			html.EscapeString(routine.Name),
+			html.EscapeString(routine.Kind),
+		)
+	}
+	return output + ROUTINE_TREE_CLOSE
 }
 
 // Return a list of the keys in a map, sorted alphabetically

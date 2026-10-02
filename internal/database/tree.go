@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Azpect3120/Web-Database-Viewer/internal/model"
@@ -130,6 +131,190 @@ func tableList(conn *sql.DB, driver string) (map[string][]model.Column, error) {
 	}
 
 	return tree, nil
+}
+
+// RoutineTree returns an HTML tree of stored procedures and functions.
+func RoutineTree(c *gin.Context) string {
+	url, driver, err := currentConnection(c)
+	if err != nil {
+		return templates.RoutineTreeError(err)
+	}
+
+	routines, err := generateRoutineTree(url, driver)
+	if err != nil {
+		return templates.RoutineTreeError(err)
+	}
+
+	return templates.RoutineTree(routines)
+}
+
+func generateRoutineTree(url, driver string) ([]model.Routine, error) {
+	conn, err := sql.Open(sqlDriver(driver), url)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	return routineList(conn, driver)
+}
+
+func routineList(conn *sql.DB, driver string) ([]model.Routine, error) {
+	q, err := routineListQuery(driver)
+	if err != nil {
+		return nil, err
+	}
+
+	if q == "" {
+		return []model.Routine{}, nil
+	}
+
+	rows, err := conn.Query(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	routines := make([]model.Routine, 0)
+	for rows.Next() {
+		var routine model.Routine
+		if err := rows.Scan(&routine.ID, &routine.Schema, &routine.Name, &routine.Signature, &routine.Kind); err != nil {
+			return nil, err
+		}
+		routines = append(routines, routine)
+	}
+
+	return routines, rows.Err()
+}
+
+func routineListQuery(driver string) (string, error) {
+	switch driver {
+	case "postgres":
+		return query.GET_ROUTINE_LIST_PSQL, nil
+	case "mysql", "mariadb":
+		return query.GET_ROUTINE_LIST_MYSQL, nil
+	case "sqlserver":
+		return query.GET_ROUTINE_LIST_MSSQL, nil
+	case "sqlite3":
+		return "", nil
+	default:
+		return "", errors.New("Routine List: Unsupported driver")
+	}
+}
+
+// RoutineDefinition returns the SQL source for one procedure or function.
+func RoutineDefinition(c *gin.Context) string {
+	url, driver, err := currentConnection(c)
+	if err != nil {
+		return ""
+	}
+
+	id := c.Query("id")
+	name := c.Query("name")
+	kind := c.Query("kind")
+	if id == "" || name == "" || kind == "" {
+		return ""
+	}
+
+	conn, err := sql.Open(sqlDriver(driver), url)
+	if err != nil {
+		return ""
+	}
+	defer conn.Close()
+
+	definition, err := routineDefinition(conn, driver, id, name, kind)
+	if err != nil {
+		return ""
+	}
+
+	return definition
+}
+
+func routineDefinition(conn *sql.DB, driver, id, name, kind string) (string, error) {
+	switch driver {
+	case "postgres":
+		oid, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return "", errors.New("Invalid PostgreSQL routine ID")
+		}
+		return routineDefinitionValue(conn, fmt.Sprintf(query.GET_ROUTINE_DEFINITION_PSQL, oid))
+	case "mysql", "mariadb":
+		if kind != "procedure" && kind != "function" {
+			return "", errors.New("Invalid MySQL routine type")
+		}
+		return mysqlRoutineDefinition(conn, kind, name)
+	case "sqlserver":
+		objectID, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return "", errors.New("Invalid SQL Server routine ID")
+		}
+		return routineDefinitionValue(conn, fmt.Sprintf(query.GET_ROUTINE_DEFINITION_MSSQL, objectID))
+	default:
+		return "", errors.New("Routine Definition: Unsupported driver")
+	}
+}
+
+func routineDefinitionValue(conn *sql.DB, q string) (string, error) {
+	var definition sql.NullString
+	if err := conn.QueryRow(q).Scan(&definition); err != nil {
+		return "", err
+	}
+	if !definition.Valid {
+		return "", errors.New("Routine definition is unavailable")
+	}
+	return definition.String, nil
+}
+
+func mysqlRoutineDefinition(conn *sql.DB, kind, name string) (string, error) {
+	q := fmt.Sprintf("SHOW CREATE %s `%s`", strings.ToUpper(kind), strings.ReplaceAll(name, "`", "``"))
+	rows, err := conn.Query(q)
+	if err != nil {
+		return "", err
+	}
+	defer rows.Close()
+
+	columns, err := rows.Columns()
+	if err != nil {
+		return "", err
+	}
+	if !rows.Next() {
+		return "", errors.New("Routine definition is unavailable")
+	}
+
+	values := make([]sql.NullString, len(columns))
+	destinations := make([]any, len(columns))
+	for i := range values {
+		destinations[i] = &values[i]
+	}
+	if err := rows.Scan(destinations...); err != nil {
+		return "", err
+	}
+	for i, column := range columns {
+		if strings.HasPrefix(strings.ToLower(column), "create ") && values[i].Valid {
+			return values[i].String, nil
+		}
+	}
+
+	return "", errors.New("Routine definition is unavailable")
+}
+
+func currentConnection(c *gin.Context) (string, string, error) {
+	session := sessions.Default(c)
+	connectionsBytes, ok := session.Get("connections").([]byte)
+	current, currentOK := session.Get("current").(string)
+	if !ok || !currentOK {
+		return "", "", errors.New("No connections found")
+	}
+
+	var connections map[string][2]string
+	if err := json.Unmarshal(connectionsBytes, &connections); err != nil {
+		return "", "", err
+	}
+
+	connection, ok := connections[current]
+	if !ok {
+		return "", "", errors.New("Current connection not found")
+	}
+	return connection[0], connection[1], nil
 }
 
 // tableQueries returns the metadata queries for one table.

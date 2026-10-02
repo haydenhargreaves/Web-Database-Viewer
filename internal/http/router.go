@@ -75,8 +75,19 @@ func populate(web, api *gin.RouterGroup) {
 	web.GET("/connections/tree/enum", func(c *gin.Context) {
 		c.String(200, database.EnumTree(c))
 	})
+	web.GET("/connections/tree/routine", func(c *gin.Context) {
+		c.String(200, database.RoutineTree(c))
+	})
+	web.GET("/connections/tree/routine/definition", func(c *gin.Context) {
+		definition := database.RoutineDefinition(c)
+		if definition == "" {
+			c.String(404, "Routine definition is unavailable")
+			return
+		}
+		c.String(200, definition)
+	})
 	web.GET("/connections/tree", func(c *gin.Context) {
-		c.String(200, database.TableTree(c)+database.EnumTree(c))
+		c.String(200, database.TableTree(c)+database.EnumTree(c)+database.RoutineTree(c))
 	})
 	web.GET("/query/auto", templates.ToggleQueryType)
 	web.GET("/manager/open", templates.OpenManager)

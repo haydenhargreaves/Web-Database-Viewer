@@ -20,6 +20,17 @@ function ToggleFields(id) {
   }
 }
 
+function ToggleTreeSection(id) {
+  const section = document.getElementById(`tree-section-${id}`);
+  const button = document.getElementById(`tree-section-toggle-${id}`);
+  const icon = document.getElementById(`tree-section-icon-${id}`);
+  const isExpanded = section.classList.contains("hidden");
+
+  section.classList.toggle("hidden", !isExpanded);
+  button.setAttribute("aria-expanded", isExpanded.toString());
+  icon.setAttribute("transform", isExpanded ? "rotate(0)" : "rotate(-90)");
+}
+
 function LoadTableQuery(table) {
   const sql = document.getElementById("sql")
   sql.value = `SELECT * FROM ${table};`;
@@ -30,6 +41,32 @@ function LoadTableQueryWithFields(table, fields) {
   const sql = document.getElementById("sql")
   sql.value = `SELECT ${fields} FROM ${table};`;
   sql.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+async function LoadRoutineDefinition(button) {
+  const errorMessage = document.getElementById("routine-source-error");
+  errorMessage.classList.add("hidden");
+  errorMessage.textContent = "";
+
+  const parameters = new URLSearchParams({
+    id: button.dataset.routineId,
+    name: button.dataset.routineName,
+    kind: button.dataset.routineKind,
+  });
+
+  try {
+    const response = await fetch(`/v1/web/connections/tree/routine/definition?${parameters}`);
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const sql = document.getElementById("sql");
+    sql.value = await response.text();
+    sql.dispatchEvent(new Event("input", { bubbles: true }));
+  } catch (error) {
+    errorMessage.textContent = error.message || "Unable to load the routine definition.";
+    errorMessage.classList.remove("hidden");
+  }
 }
 
 function ToggleEnumValues(id) {
@@ -84,8 +121,38 @@ function ResetTableSearch() {
   FilterTables("");
 }
 
+function FilterRoutines(query) {
+  const normalizedQuery = query.trim().toLowerCase();
+  const routines = document.querySelectorAll("#database-routine-tree > li[data-routine-name]");
+  let matches = 0;
+
+  routines.forEach((routine) => {
+    const matchesQuery = FuzzyMatches(routine.dataset.routineName.toLowerCase(), normalizedQuery);
+    routine.classList.toggle("hidden", !matchesQuery);
+    if (matchesQuery) {
+      matches += 1;
+    }
+  });
+
+  const emptyMessage = document.getElementById("routine-search-empty");
+  emptyMessage.classList.toggle("hidden", normalizedQuery === "" || matches > 0);
+}
+
+function ResetRoutineSearch() {
+  const search = document.getElementById("routine-search");
+  if (!search) {
+    return;
+  }
+
+  search.value = "";
+  FilterRoutines("");
+}
+
 document.addEventListener("htmx:afterSettle", (event) => {
   if (event.detail.xhr.responseText.includes('id="database-table-tree"')) {
     ResetTableSearch();
+  }
+  if (event.detail.xhr.responseText.includes('id="database-routine-tree"')) {
+    ResetRoutineSearch();
   }
 });

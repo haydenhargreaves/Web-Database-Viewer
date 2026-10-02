@@ -18,3 +18,12 @@ type ForeignKey struct {
 	ForeignTable  string
 	ForeignColumn string
 }
+
+// Routine is a stored procedure or function that can be displayed in the tree.
+type Routine struct {
+	ID        string
+	Schema    string
+	Name      string
+	Signature string
+	Kind      string
+}
