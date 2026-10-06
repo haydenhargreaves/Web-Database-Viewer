@@ -29,3 +29,21 @@ func TestRoutineTreeRendersEscapedLoadControls(t *testing.T) {
 		}
 	}
 }
+
+func TestViewTreeRendersSortedEscapedLoadControls(t *testing.T) {
+	output := ViewTree([]string{`z_view`, `a"view`})
+	for _, expected := range []string{
+		`id="database-view-tree"`,
+		`data-view-name="a&#34;view"`,
+		`LoadViewQuery(this.dataset.viewName);`,
+		`a&#34;view`,
+	} {
+		if !strings.Contains(output, expected) {
+			t.Errorf("ViewTree() missing %q", expected)
+		}
+	}
+
+	if strings.Index(output, `a&#34;view`) > strings.Index(output, `z_view`) {
+		t.Error("ViewTree() did not sort views")
+	}
+}

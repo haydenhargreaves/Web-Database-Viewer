@@ -37,6 +37,12 @@ function LoadTableQuery(table) {
   sql.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+function LoadViewQuery(view) {
+  const sql = document.getElementById("sql")
+  sql.value = `SELECT * FROM ${view};`;
+  sql.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 function LoadTableQueryWithFields(table, fields) {
   const sql = document.getElementById("sql")
   sql.value = `SELECT ${fields} FROM ${table};`;
@@ -121,6 +127,33 @@ function ResetTableSearch() {
   FilterTables("");
 }
 
+function FilterViews(query) {
+  const normalizedQuery = query.trim().toLowerCase();
+  const views = document.querySelectorAll("#database-view-tree > li[data-view-name]");
+  let matches = 0;
+
+  views.forEach((view) => {
+    const matchesQuery = FuzzyMatches(view.dataset.viewName.toLowerCase(), normalizedQuery);
+    view.classList.toggle("hidden", !matchesQuery);
+    if (matchesQuery) {
+      matches += 1;
+    }
+  });
+
+  const emptyMessage = document.getElementById("view-search-empty");
+  emptyMessage.classList.toggle("hidden", normalizedQuery === "" || matches > 0);
+}
+
+function ResetViewSearch() {
+  const search = document.getElementById("view-search");
+  if (!search) {
+    return;
+  }
+
+  search.value = "";
+  FilterViews("");
+}
+
 function FilterRoutines(query) {
   const normalizedQuery = query.trim().toLowerCase();
   const routines = document.querySelectorAll("#database-routine-tree > li[data-routine-name]");
@@ -151,6 +184,9 @@ function ResetRoutineSearch() {
 document.addEventListener("htmx:afterSettle", (event) => {
   if (event.detail.xhr.responseText.includes('id="database-table-tree"')) {
     ResetTableSearch();
+  }
+  if (event.detail.xhr.responseText.includes('id="database-view-tree"')) {
+    ResetViewSearch();
   }
   if (event.detail.xhr.responseText.includes('id="database-routine-tree"')) {
     ResetRoutineSearch();

@@ -133,6 +133,70 @@ func tableList(conn *sql.DB, driver string) (map[string][]model.Column, error) {
 	return tree, nil
 }
 
+// ViewTree returns an HTML tree of views available in the current connection.
+func ViewTree(c *gin.Context) string {
+	url, driver, err := currentConnection(c)
+	if err != nil {
+		return templates.ViewTreeError(err)
+	}
+
+	views, err := generateViewTree(url, driver)
+	if err != nil {
+		return templates.ViewTreeError(err)
+	}
+
+	return templates.ViewTree(views)
+}
+
+func generateViewTree(url, driver string) ([]string, error) {
+	conn, err := sql.Open(sqlDriver(driver), url)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	return viewList(conn, driver)
+}
+
+func viewList(conn *sql.DB, driver string) ([]string, error) {
+	q, err := viewListQuery(driver)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := conn.Query(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	views := make([]string, 0)
+	for rows.Next() {
+		var view string
+		if err := rows.Scan(&view); err != nil {
+			return nil, err
+		}
+		views = append(views, view)
+	}
+
+	return views, rows.Err()
+}
+
+func viewListQuery(driver string) (string, error) {
+	switch driver {
+	case "postgres":
+		return query.GET_VIEW_LIST_PSQL, nil
+	case "mysql", "mariadb":
+		return query.GET_VIEW_LIST_MYSQL, nil
+	case "sqlite3":
+		return query.GET_VIEW_LIST_SQLITE, nil
+	case "sqlserver":
+		return query.GET_VIEW_LIST_MSSQL, nil
+	default:
+		return "", errors.New("View List: Unsupported driver")
+	}
+}
+
 // RoutineTree returns an HTML tree of stored procedures and functions.
 func RoutineTree(c *gin.Context) string {
 	url, driver, err := currentConnection(c)

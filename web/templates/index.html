@@ -5,28 +5,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Database Query Tool</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("theme");
+      const isDark = savedTheme ? savedTheme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+    }());
+  </script>
+  <link href="/v1/web/static/styles/main.css" rel="stylesheet">
   <script src="https://unpkg.com/htmx.org@2.0.1"></script>
   <link rel="icon" type="image/png" href="/v1/web/assets/favicon.ico">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
 
   <div class="flex flex-col h-screen">
     <!-- Top Bar -->
-    <div class="bg-white shadow-md p-4 flex items-center justify-between border-b">
+    <div class="bg-white shadow-md p-4 flex items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div>
         <h1 class="text-2xl font-bold">Database Query Tool</h1>
-        <p class="text-sm text-gray-600">Connect and query your databases effortlessly.</p>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Connect and query your databases effortlessly.</p>
       </div>
       <div class="flex items-center justify-end space-x-4 flex-wrap">
         <form hx-post="/v1/api/connections/connect" hx-trigger="change" hx-swap="outerHTML"
           hx-target="#connected-database" hx-indicator="#table-loading" hx-encoding="multipart/form-data"
           class="flex items-center justify-end space-x-2 flex-wrap">
-          <label for="connected-database" class="block text-sm font-medium text-gray-700">Connected Database:</label>
+          <label for="connected-database" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Connected Database:</label>
           <select hx-get="/v1/web/connections" hx-trigger="load" hx-swap="outerHTML" id="connected-database"
             name="connected-database" hx-params="none"
-            class="mt-1 block p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"></select>
+            class="mt-1 block p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
         </form>
         <button onclick="ShowModal();" class="bg-blue-500 text-white px-4 py-2 my-2 rounded-md text-sm md:text-base">
           Add Connection
@@ -35,19 +43,30 @@
           class="bg-blue-500 text-white px-4 py-2 my-2 rounded-md text-sm md:text-base">
           Manage Connections
         </button>
+        <button id="theme-toggle" type="button" onclick="ToggleTheme();" aria-pressed="false"
+          class="p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200 dark:hover:bg-gray-700"
+          title="Switch color mode">
+          <span class="sr-only">Toggle color mode</span>
+          <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36-6.36-.71.71M6.35 17.65l-.71.71m12.02 0-.71-.71M6.35 6.35l-.71-.71M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <svg class="hidden w-5 h-5 dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.35 15.35A7.5 7.5 0 018.65 3.65 7.5 7.5 0 1020.35 15.35z" />
+          </svg>
+        </button>
       </div>
     </div>
 
     <div class="flex flex-col md:flex-row flex-grow min-h-0 md:overflow-hidden">
       <!-- Sidebar -->
-      <div class="w-full md:w-1/4 bg-white shadow-md md:flex md:flex-col md:min-h-0 md:overflow-hidden">
-        <div class="p-4 border-b flex justify-between items-center">
+      <div class="w-full md:w-1/4 bg-white shadow-md dark:bg-gray-800 md:flex md:flex-col md:min-h-0 md:overflow-hidden">
+        <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
           <h2 class="text-lg font-bold">
             <span id="database-name-tree">database</span>
           </h2>
           <button hx-get="/v1/web/connections/tree" hx-trigger="click" hx-swap="none"
-            class="hover:bg-gray-100 p-2 rounded-md" hx-indicator="#table-loading">
-            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon h-4 w-4" viewBox="0 0 512 512">
+            class="hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md" hx-indicator="#table-loading">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon h-4 w-4 dark:text-white" viewBox="0 0 512 512" fill="currentColor">
               <path
                 d="M400 148l-21.12-24.57A191.43 191.43 0 00240 64C134 64 48 150 48 256s86 192 192 192a192.09 192.09 0 00181.07-128"
                 fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" />
@@ -66,7 +85,7 @@
                   viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
                 </svg>
-                <span class="text-lg text-gray-700">Tables</span>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Tables</span>
               </span>
               <p id="table-loading" class="text-xs font-light htmx-indicator">Loading...</p>
             </button>
@@ -74,9 +93,32 @@
               hx-params="none" hx-indicator="#table-loading" hx-target="#database-table-tree">
               <label for="table-search" class="sr-only">Search tables</label>
               <input id="table-search" type="search" placeholder="Search tables" oninput="FilterTables(this.value);"
-                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
               <ul hx-swap-oob="outerHTML" id="database-table-tree" class="mt-4 space-y-2"></ul>
-              <p id="table-search-empty" class="hidden mt-4 text-sm text-gray-500">No matching tables.</p>
+              <p id="table-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching tables.</p>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <button id="tree-section-toggle-views" type="button" onclick="ToggleTreeSection('views');"
+              aria-expanded="false" aria-controls="tree-section-views"
+              class="w-full flex items-center justify-between border-b pb-4 pt-2 text-left">
+              <span class="flex items-center">
+                <svg id="tree-section-icon-views" class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Views</span>
+              </span>
+              <p id="view-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </button>
+            <div id="tree-section-views" class="hidden" hx-get="/v1/web/connections/tree/view" hx-trigger="load"
+              hx-params="none" hx-indicator="#view-loading" hx-target="#database-view-tree">
+              <label for="view-search" class="sr-only">Search views</label>
+              <input id="view-search" type="search" placeholder="Search views" oninput="FilterViews(this.value);"
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+              <ul hx-swap-oob="outerHTML" id="database-view-tree" class="mt-4 space-y-2"></ul>
+              <p id="view-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching views.</p>
             </div>
           </div>
 
@@ -89,7 +131,7 @@
                   viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
                 </svg>
-                <span class="text-lg text-gray-700">Enums</span>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Enums</span>
               </span>
               <p id="enum-loading" class="text-xs font-light htmx-indicator">Loading...</p>
             </button>
@@ -108,7 +150,7 @@
                   viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
                 </svg>
-                <span class="text-lg text-gray-700">Procedures &amp; Functions</span>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Procedures &amp; Functions</span>
               </span>
               <p id="routine-loading" class="text-xs font-light htmx-indicator">Loading...</p>
             </button>
@@ -117,9 +159,9 @@
               <label for="routine-search" class="sr-only">Search procedures and functions</label>
               <input id="routine-search" type="search" placeholder="Search procedures and functions"
                 oninput="FilterRoutines(this.value);"
-                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
               <ul hx-swap-oob="outerHTML" id="database-routine-tree" class="mt-4 space-y-2"></ul>
-              <p id="routine-search-empty" class="hidden mt-4 text-sm text-gray-500">No matching procedures or functions.</p>
+              <p id="routine-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching procedures or functions.</p>
               <p id="routine-source-error" class="hidden mt-2 text-sm text-red-500" role="alert"></p>
             </div>
           </div>
@@ -132,11 +174,11 @@
           <!-- Query Input -->
           <div id="query-main" class="mb-4">
             <div class="flex items-center justify-between">
-              <label for="sql" class="block text-sm font-medium text-gray-700">SQL Query </label>
+              <label for="sql" class="block text-sm font-medium text-gray-700 dark:text-gray-200">SQL Query </label>
               <div class="flex items-center space-x-6">
                 <form class="flex items-center space-x-2" hx-get="/v1/web/query/auto" hx-swap="outerHTML"
                   hx-target="#query-main" hx-trigger="input">
-                  <label for="auto-toggle" class="text-sm font-medium text-gray-700">Auto-Run</label>
+                  <label for="auto-toggle" class="text-sm font-medium text-gray-700 dark:text-gray-200">Auto-Run</label>
                   <input type="checkbox" name="toggle" class="toggle-checkbox"
                     title="Toggle auto-query functionality. Note: This will send whatever query is in the input and clear the box.">
                 </form>
@@ -152,13 +194,13 @@
             </div>
 
             <!-- Manual Query Input -->
-            <textarea id="sql" name="sql" rows="4"
-              class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+            <textarea id="sql" name="sql" rows="12"
+              class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"></textarea>
 
             <!-- Auto Query Input -->
             <!-- <textarea id="sql" name="sql" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" hx-post="/v1/api/query" hx-trigger="input delay:500ms" hx-swap="outerHTML" hx-target="#query-results" hx-indicator="#spinner"></textarea> -->
 
-            <p id="spinner" class="text-gray-700 text-sm px-1 py-2 htmx-indicator opacity-0"> Query running... </p>
+            <p id="spinner" class="text-gray-700 dark:text-gray-300 text-sm px-1 py-2 htmx-indicator opacity-0"> Query running... </p>
             <p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm hidden"></p>
           </div>
 
@@ -211,10 +253,10 @@
   <!-- Create Connection Modal -->
   <div id="connection-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden opacity-0">
     <div class="flex items-center justify-center min-h-screen">
-      <div class="bg-white p-6 rounded-lg shadow-lg w-2/3">
-        <div class="flex justify-between items-center border-b pb-2">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-2/3 dark:bg-gray-800">
+        <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
           <h2 class="text-xl font-bold">Add New Connection</h2>
-          <button onclick="HideModal();" class="text-gray-500 hover:text-gray-700">
+          <button onclick="HideModal();" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -224,27 +266,27 @@
         <div class="mt-4">
           <form id="connection-form" class="grid grid-cols-2 gap-4">
             <div>
-              <label for="db-host" class="block text-sm font-medium text-gray-700">Host</label>
+              <label for="db-host" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Host</label>
               <input id="db-host" name="db-host" type="text" placeholder="127.0.0.1"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
             </div>
             <div>
-              <label for="db-port" class="block text-sm font-medium text-gray-700">Port</label>
+              <label for="db-port" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Port</label>
               <input id="db-port" name="db-port" type="text" placeholder="5432"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
             </div>
             <div>
-              <label for="db-username" class="block text-sm font-medium text-gray-700">Username</label>
+              <label for="db-username" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Username</label>
               <input id="db-username" name="db-username" type="text" placeholder="admin"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
             </div>
             <div>
-              <label for="db-password" class="block text-sm font-medium text-gray-700">Password</label>
+              <label for="db-password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
               <div class="relative mt-1">
                 <input id="db-password" name="db-password" type="password" placeholder="●●●●●●●●●"
-                  class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                  class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                 <button type="button" id="togglePassword"
-                  class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 bg-gray-200 rounded-r-md border border-gray-300"
+                  class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 bg-gray-200 rounded-r-md border border-gray-300 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-200"
                   title="Display secret details">
                   <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -255,9 +297,9 @@
               </div>
             </div>
             <div>
-              <label for="db-driver" class="block text-sm font-medium text-gray-700">Driver/Type of Database</label>
+              <label for="db-driver" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Driver/Type of Database</label>
               <select id="db-driver" name="db-driver"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                 <option value="postgres">PostgreSQL</option>
                 <option value="mysql">MySQL</option>
                 <option value="sqlite3">SQLite</option>
@@ -268,12 +310,12 @@
               </select>
             </div>
             <div>
-              <label for="db-database" class="block text-sm font-medium text-gray-700">Database Name</label>
+              <label for="db-database" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Database Name</label>
               <input id="db-database" name="db-database" type="text" placeholder="master_database"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
             </div>
             <div class="col-span-2">
-              <label for="db-url" class="block text-sm font-medium text-gray-700">
+              <label for="db-url" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Connection Name
                 <br>
                 <span class="text-xs font-light">
@@ -282,10 +324,10 @@
                 </span>
               </label>
               <input name="db-conn-name" id="db-conn-name" placeholder="master_database"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
             </div>
             <div class="col-span-2">
-              <label for="db-url" class="block text-sm font-medium text-gray-700">
+              <label for="db-url" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Connection URL
                 <br>
                 <span class="text-xs font-light">
@@ -300,7 +342,7 @@
               <input id="db-url" name="db-url" type="password"
                 placeholder="postgresql://admin:password@127.0.0.1:5432/master_database"
                 value="postgresql://user:password@127.0.0.1:5432/database?sslmode=disable"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
               <span id="db-url-invalid" class="text-xs text-red-500 hidden">Connection URL is incomplete or
                 invalid.</span>
             </div>
@@ -313,7 +355,7 @@
             </button>
             <button hx-post="/v1/api/connections/test" hx-trigger="click" hx-swap="outerHTML"
               hx-target="#connection-status" hx-include="#connection-form" hx-encoding="multipart/form-data"
-              class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center space-x-2">
+              class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center space-x-2 dark:bg-gray-700 dark:text-gray-100">
               <span>Test Connection</span>
               <span id="connection-status" class="w-3 h-3 rounded-full bg-gray-400"></span>
             </button>
@@ -332,6 +374,7 @@
   <script src="/v1/web/static/scripts/connection-url.js"></script>
   <script src="/v1/web/static/scripts/modal.js"></script>
   <script src="/v1/web/static/scripts/tree.js"></script>
+  <script src="/v1/web/static/scripts/theme.js"></script>
 </body>
 
 </html>

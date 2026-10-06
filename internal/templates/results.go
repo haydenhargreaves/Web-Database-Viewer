@@ -10,22 +10,22 @@ const result_list_close string = `</ul>`
 
 // Result item definition
 const result_item string = `
-	<li class="overflow-x-auto overflow-y-hidden bg-white rounded-lg shadow-md mb-8">
+	<li class="overflow-x-auto overflow-y-hidden bg-white rounded-lg shadow-md mb-8 dark:bg-gray-800">
 		%s
 	</li>
 `
 
 // Table wrapper definitions
-const table_open string = `<table class="min-w-full divide-y divide-gray-200">`
+const table_open string = `<table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">`
 const table_close string = `</table>`
 
 // Header definitions
-const table_head_open string = `<thead class="bg-gray-50"><tr>`
+const table_head_open string = `<thead class="bg-gray-50 dark:bg-gray-700"><tr>`
 const table_head_close string = `</tr></thead>`
-const table_head_row string = `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">%s</th>`
+const table_head_row string = `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">%s</th>`
 
 // Body definitions
-const table_body_open string = `<tbody class="bg-white divide-y divide-gray-200">`
+const table_body_open string = `<tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">`
 const table_body_close string = `</tbody>`
 const table_body_row string = `<td class="px-6 py-4 whitespace-nowrap">%v</td>`
 

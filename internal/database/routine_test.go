@@ -51,3 +51,35 @@ func TestRoutineDefinitionRejectsInvalidIdentifiers(t *testing.T) {
 		t.Error("routineDefinition() accepted an invalid MySQL routine type")
 	}
 }
+
+func TestViewListQuery(t *testing.T) {
+	tests := []struct {
+		driver  string
+		want    string
+		wantErr bool
+	}{
+		{driver: "postgres", want: query.GET_VIEW_LIST_PSQL},
+		{driver: "mysql", want: query.GET_VIEW_LIST_MYSQL},
+		{driver: "mariadb", want: query.GET_VIEW_LIST_MYSQL},
+		{driver: "sqlite3", want: query.GET_VIEW_LIST_SQLITE},
+		{driver: "sqlserver", want: query.GET_VIEW_LIST_MSSQL},
+		{driver: "oracle", wantErr: true},
+	}
+
+	for _, test := range tests {
+		got, err := viewListQuery(test.driver)
+		if test.wantErr {
+			if err == nil {
+				t.Errorf("viewListQuery(%q) returned nil error", test.driver)
+			}
+			continue
+		}
+		if err != nil {
+			t.Errorf("viewListQuery(%q) returned error: %v", test.driver, err)
+			continue
+		}
+		if got != test.want {
+			t.Errorf("viewListQuery(%q) = %q, want %q", test.driver, got, test.want)
+		}
+	}
+}

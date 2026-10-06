@@ -72,6 +72,9 @@ func populate(web, api *gin.RouterGroup) {
 	web.GET("/connections/tree/table/columns", func(c *gin.Context) {
 		c.String(200, database.TableColumns(c))
 	})
+	web.GET("/connections/tree/view", func(c *gin.Context) {
+		c.String(200, database.ViewTree(c))
+	})
 	web.GET("/connections/tree/enum", func(c *gin.Context) {
 		c.String(200, database.EnumTree(c))
 	})
@@ -87,7 +90,7 @@ func populate(web, api *gin.RouterGroup) {
 		c.String(200, definition)
 	})
 	web.GET("/connections/tree", func(c *gin.Context) {
-		c.String(200, database.TableTree(c)+database.EnumTree(c)+database.RoutineTree(c))
+		c.String(200, database.TableTree(c)+database.ViewTree(c)+database.EnumTree(c)+database.RoutineTree(c))
 	})
 	web.GET("/query/auto", templates.ToggleQueryType)
 	web.GET("/manager/open", templates.OpenManager)
