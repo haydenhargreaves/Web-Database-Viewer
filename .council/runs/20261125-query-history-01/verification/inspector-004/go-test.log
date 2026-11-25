@@ -1,0 +1,50 @@
+?   	github.com/Azpect3120/Web-Database-Viewer/cmd	[no test files]
+=== RUN   TestSQLDriver
+--- PASS: TestSQLDriver (0.00s)
+=== RUN   TestQueryHistoryResponseIdentity
+=== RUN   TestQueryHistoryResponseIdentity/#00
+=== RUN   TestQueryHistoryResponseIdentity/A_&amp;_B
+=== RUN   TestQueryHistoryResponseIdentity/A_&_B
+=== RUN   TestQueryHistoryResponseIdentity/<script>
+=== RUN   TestQueryHistoryResponseIdentity/_spaced_
+=== RUN   TestQueryHistoryResponseIdentity/_
+=== RUN   TestQueryHistoryResponseIdentity/日本語
+=== RUN   TestQueryHistoryResponseIdentity/No_connections
+--- PASS: TestQueryHistoryResponseIdentity (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/#00 (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/A_&amp;_B (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/A_&_B (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/<script> (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/_spaced_ (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/_ (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/日本語 (0.00s)
+    --- PASS: TestQueryHistoryResponseIdentity/No_connections (0.00s)
+=== RUN   TestIsUniqueIdentifier
+--- PASS: TestIsUniqueIdentifier (0.00s)
+=== RUN   TestUniqueIdentifierValue
+--- PASS: TestUniqueIdentifierValue (0.00s)
+=== RUN   TestQueryValue
+--- PASS: TestQueryValue (0.00s)
+=== RUN   TestRoutineListQuery
+--- PASS: TestRoutineListQuery (0.00s)
+=== RUN   TestRoutineListSQLite
+--- PASS: TestRoutineListSQLite (0.00s)
+=== RUN   TestRoutineDefinitionRejectsInvalidIdentifiers
+--- PASS: TestRoutineDefinitionRejectsInvalidIdentifiers (0.00s)
+=== RUN   TestViewListQuery
+--- PASS: TestViewListQuery (0.00s)
+PASS
+ok  	github.com/Azpect3120/Web-Database-Viewer/internal/database	0.007s
+?   	github.com/Azpect3120/Web-Database-Viewer/internal/http	[no test files]
+?   	github.com/Azpect3120/Web-Database-Viewer/internal/model	[no test files]
+?   	github.com/Azpect3120/Web-Database-Viewer/internal/query	[no test files]
+=== RUN   TestConnectionHistoryIdentity
+--- PASS: TestConnectionHistoryIdentity (0.00s)
+=== RUN   TestQueryResultTruncationWarning
+--- PASS: TestQueryResultTruncationWarning (0.00s)
+=== RUN   TestRoutineTreeRendersEscapedLoadControls
+--- PASS: TestRoutineTreeRendersEscapedLoadControls (0.00s)
+=== RUN   TestViewTreeRendersSortedEscapedLoadControls
+--- PASS: TestViewTreeRendersSortedEscapedLoadControls (0.00s)
+PASS
+ok  	github.com/Azpect3120/Web-Database-Viewer/internal/templates	0.006s

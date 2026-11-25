@@ -1,0 +1,13 @@
+{
+  "id": "baseline-003",
+  "agent": "council/inspector",
+  "stage": "BASELINING",
+  "mode": "baseline-only",
+  "ticket_fingerprint": "1e1b76898c0380a28d8f3ec5f79d7a9dc63f2e1a6e68e8568c390bb5e5a31624",
+  "pre_invocation_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "status": ""
+  },
+  "report": ".council/runs/20261125-query-history-01/verification/baseline-003/baseline.md",
+  "receipt_status": "pending"
+}

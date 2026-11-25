@@ -1,0 +1,4 @@
+<!doctype html><html><head><script src="/htmx.js"></script></head><body>
+<select id="connected-database"><option selected value="postgres://synthetic-user:synthetic-password@synthetic-host/db" data-driver="synthetic-driver" data-query-history-id="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">synthetic connection</option></select>
+<textarea id="sql" name="sql">select 123</textarea><button id="run" hx-post="/v1/api/query" hx-include="#sql" hx-target="#result">Run</button><div id="result"></div><section><button id="query-history-clear">Clear</button><p id="query-history-status"></p><ul id="query-history-list"></ul></section>
+<script src="/query-history.js"></script><script src="/test.js"></script></body></html>

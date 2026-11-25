@@ -1,0 +1,7 @@
+FAIL Error: real Tab reaches remove: <button type="button" class="block w-full text-left p-2 focus:ring-2 focus:ring-blue-500" title="SELECT manual-again"><span class="sr-only">Load query: </span><span style="display: block; white-space: pre-wrap; overflow-wrap: anywhere;">SELECT manual-again</span><time datetime="2026-11-25T21:44:46.9
+    at assert (http://127.0.0.1:43281/inspect.js:1:87)
+    at http://127.0.0.1:43281/inspect.js:14:161 completed ["actual selector loaded","special name DOM parsing","manual query recorded","actual query response ID","switch actual HTMX selector","separate B history","option/header synthetic sentinels excluded from storage","clear B","switch back restores A","actual auto editor swap","load after swap without POST","actual tree input triggers auto POST","manual works after swap","warning and clear present","clear visible"]
+Browser failure 
+DevTools listening on ws://127.0.0.1:43095/devtools/browser/f714c473-2289-48ce-b451-9af69a5f3225
+[205773:205799:1125/144444.096270:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+

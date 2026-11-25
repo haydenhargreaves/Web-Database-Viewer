@@ -7,7 +7,8 @@
   <title>Database Query Tool</title>
   <script>
     (function () {
-      const savedTheme = localStorage.getItem("theme");
+      let savedTheme;
+      try { savedTheme = localStorage.getItem("theme"); } catch (_) { /* Storage is optional. */ }
       const isDark = savedTheme ? savedTheme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.toggle("dark", isDark);
       document.documentElement.style.colorScheme = isDark ? "dark" : "light";
@@ -204,6 +205,14 @@
             <p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm hidden"></p>
           </div>
 
+          <section id="query-history" class="mb-4 p-4 bg-white rounded-md dark:bg-gray-800" aria-labelledby="query-history-heading">
+            <h2 id="query-history-heading" class="text-lg font-bold">Query History</h2>
+            <p class="text-sm">SQL may contain sensitive information and is stored in this browser.</p>
+            <button id="query-history-clear" type="button" class="mt-2 p-2 border rounded-md focus:ring-2 focus:ring-blue-500">Clear current history</button>
+            <p id="query-history-status" class="text-sm" role="status"></p>
+            <ul id="query-history-list"></ul>
+          </section>
+
           <!-- Query Results -->
           <ul id="query-results">
             <!-- <li class="overflow-x-auto overflow-y-hidden bg-white rounded-lg shadow-md"> -->
@@ -375,6 +384,7 @@
   <script src="/v1/web/static/scripts/modal.js"></script>
   <script src="/v1/web/static/scripts/tree.js"></script>
   <script src="/v1/web/static/scripts/theme.js"></script>
+  <script src="/v1/web/static/scripts/query-history.js"></script>
 </body>
 
 </html>

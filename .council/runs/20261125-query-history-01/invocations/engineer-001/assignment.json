@@ -1,0 +1,31 @@
+{
+  "id": "engineer-001",
+  "agent": "council/engineer",
+  "stage": "IMPLEMENTING",
+  "mode": "normal",
+  "plan": {
+    "revision": "v006",
+    "path": ".council/runs/20261125-query-history-01/plan/v006.md",
+    "fingerprint": "b545fb967d71800cb9da12a3b694be70061d22fc461cd4b5bbaf9354c7f3a486",
+    "requirements": {
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v006.md",
+      "fingerprint": "5d0f39e23c2efa076c8e762fb99498c5a33fd87210e462cbdfb4e5cb338dbbf1"
+    }
+  },
+  "scope": [
+    "internal/database/query.go",
+    "internal/templates/connections.go",
+    "web/templates/index.html",
+    "web/static/scripts/theme.js",
+    "web/static/styles/main.css",
+    "internal/database/query_history_test.go",
+    "internal/templates/connections_history_test.go",
+    "web/static/scripts/query-history.js",
+    "web/tests/query-history.html",
+    "web/tests/query-history.js",
+    "web/tests/query-history-server.js"
+  ],
+  "baseline": ".council/runs/20261125-query-history-01/checkpoints/s0-scope/manifest.json",
+  "report": ".council/runs/20261125-query-history-01/implementation/engineer-001/report.md",
+  "receipt_status": "pending"
+}

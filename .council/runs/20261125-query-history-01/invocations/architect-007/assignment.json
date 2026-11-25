@@ -1,0 +1,65 @@
+{
+  "id": "architect-007",
+  "agent": "council/architect",
+  "stage": "PLANNING",
+  "mode": "revision",
+  "requirements": ".council/runs/20261125-query-history-01/plan/requirements-v007.md",
+  "plan": ".council/runs/20261125-query-history-01/plan/v007.md",
+  "pre_invocation_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "files": [
+      {
+        "status": " M",
+        "path": "internal/database/query.go",
+        "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+      },
+      {
+        "status": " M",
+        "path": "internal/templates/connections.go",
+        "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+      },
+      {
+        "status": " M",
+        "path": "web/static/scripts/theme.js",
+        "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+      },
+      {
+        "status": " M",
+        "path": "web/templates/index.html",
+        "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+      },
+      {
+        "status": "??",
+        "path": "internal/database/query_history_test.go",
+        "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+      },
+      {
+        "status": "??",
+        "path": "internal/templates/connections_history_test.go",
+        "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+      },
+      {
+        "status": "??",
+        "path": "web/static/scripts/query-history.js",
+        "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history-server.js",
+        "sha256": "137ce71ad614b6654619ee90e2fdbd77e9e3dee0e78390da78b948b4c0188534"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.html",
+        "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.js",
+        "sha256": "0e9dbde54bdef8b86a059096b45be96dede4a3b406ae945bcb20ebacd8ac0276"
+      }
+    ]
+  },
+  "report": null,
+  "receipt_status": "pending"
+}

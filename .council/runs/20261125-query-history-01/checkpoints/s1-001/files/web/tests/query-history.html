@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Query history HTMX fixture</title><script src="/htmx.js"></script></head><body>
+<select id="connected-database"><option selected data-query-history-id="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">A</option></select>
+<div id="query-main"><textarea id="sql" name="sql" hx-post="/v1/api/query" hx-trigger="input delay:500ms" hx-target="#query-results" hx-swap="innerHTML"></textarea><button id="run" hx-post="/v1/api/query" hx-include="#sql" hx-target="#query-results">Run</button></div>
+<section id="query-history"><button id="query-history-clear">Clear</button><p id="query-history-status"></p><ul id="query-history-list"></ul></section><div id="query-results"></div><pre id="test-result">RUNNING</pre>
+<script src="/query-history.js"></script><script src="/test.js"></script></body></html>

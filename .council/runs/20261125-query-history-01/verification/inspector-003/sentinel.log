@@ -1,0 +1,17 @@
+synthetic-server.js:3
+const http = require('http');
+             ^
+
+ReferenceError: require is not defined
+    at synthetic-server.js:3:14
+    at Script.runInThisContext (node:vm:137:12)
+    at Object.runInThisContext (node:vm:317:38)
+    at Object.<anonymous> (/home/azpect/Documents/Projects/Web-Database-Viewer/.council/runs/20261125-query-history-01/verification/inspector-003/sentinel-server.js:9:4)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+
+Node.js v22.23.3

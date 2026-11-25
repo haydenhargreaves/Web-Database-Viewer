@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "run_id": "20261125-query-history-01",
+  "invocation_id": "baseline-003",
+  "agent_id": "council/inspector",
+  "stage": "BASELINING",
+  "status": "BASELINE_CAPTURED",
+  "inputs": {
+    "plan_revision": null,
+    "code_identity": "9ebc8c67e24c79392989eb533f98195370580feb"
+  },
+  "summary": "Baseline captured; all 11 discovered Go tests passed. Container and browser behavior were not verified.",
+  "artifacts": [
+    {
+      "path": ".council/runs/20261125-query-history-01/verification/baseline-003/baseline.md",
+      "purpose": "Baseline verification evidence and canonical local command"
+    }
+  ],
+  "changed_files": [],
+  "requirements": [],
+  "findings": [],
+  "verification": [
+    {
+      "command": "GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off go test -mod=vendor -count=1 -v ./...",
+      "cwd": "/home/azpect/Documents/Projects/Web-Database-Viewer",
+      "exit_code": 0,
+      "outcome": "PASS",
+      "evidence": "11 tests passed; no failures or reported skips; four packages had no test files."
+    }
+  ],
+  "assumptions": [],
+  "blockers": [],
+  "recommended_action": "Consider the recorded browser, container, and Go version limitations when establishing feature verification."
+}

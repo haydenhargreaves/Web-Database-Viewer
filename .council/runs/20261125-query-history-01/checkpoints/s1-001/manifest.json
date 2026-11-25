@@ -1,0 +1,201 @@
+{
+  "run_id": "20261125-query-history-01",
+  "checkpoint_id": "s1-001",
+  "plan_revision": "v007",
+  "plan_sha256": "27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022",
+  "requirements_sha256": "7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f",
+  "inspector_approval": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-005/report.md",
+  "approved_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "files": [
+      {
+        "status": " M",
+        "path": "internal/database/query.go",
+        "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+      },
+      {
+        "status": " M",
+        "path": "internal/templates/connections.go",
+        "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+      },
+      {
+        "status": " M",
+        "path": "web/static/scripts/theme.js",
+        "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+      },
+      {
+        "status": " M",
+        "path": "web/templates/index.html",
+        "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+      },
+      {
+        "status": "??",
+        "path": "internal/database/query_history_test.go",
+        "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+      },
+      {
+        "status": "??",
+        "path": "internal/templates/connections_history_test.go",
+        "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+      },
+      {
+        "status": "??",
+        "path": "web/static/scripts/query-history.js",
+        "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history-server.js",
+        "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.html",
+        "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.js",
+        "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+      }
+    ]
+  },
+  "s0_scope": ".council/runs/20261125-query-history-01/checkpoints/s0-scope/manifest.json",
+  "scope": "S0 scope candidate source files and tests, including conditionally authorized CSS",
+  "entries": [
+    {
+      "path": "internal/database/query.go",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/internal/database/query.go"
+    },
+    {
+      "path": "internal/templates/connections.go",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/internal/templates/connections.go"
+    },
+    {
+      "path": "web/templates/index.html",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/templates/index.html"
+    },
+    {
+      "path": "web/static/scripts/theme.js",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/static/scripts/theme.js"
+    },
+    {
+      "path": "web/static/styles/main.css",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "a073ee5a6087aa9735695c378d9053dbb5d5b667aef5a4df494880720a2d0891",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/static/styles/main.css"
+    },
+    {
+      "path": "internal/database/query_history_test.go",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/internal/database/query_history_test.go"
+    },
+    {
+      "path": "internal/templates/connections_history_test.go",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/internal/templates/connections_history_test.go"
+    },
+    {
+      "path": "web/static/scripts/query-history.js",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/static/scripts/query-history.js"
+    },
+    {
+      "path": "web/tests/query-history.html",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/tests/query-history.html"
+    },
+    {
+      "path": "web/tests/query-history.js",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/tests/query-history.js"
+    },
+    {
+      "path": "web/tests/query-history-server.js",
+      "present": true,
+      "type": "regular",
+      "mode": 420,
+      "uid": 1000,
+      "gid": 100,
+      "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792",
+      "snapshot": ".council/runs/20261125-query-history-01/checkpoints/s1-001/files/web/tests/query-history-server.js"
+    }
+  ],
+  "verification_configuration": [
+    {
+      "path": "go.mod",
+      "mode": 420,
+      "sha256": "4c1ae7d91b003422a7d445a4a7d1e50ab6d5d9a7802cd2164c577d985eecdfe6"
+    },
+    {
+      "path": "go.sum",
+      "mode": 420,
+      "sha256": "146201ea1c3ab4d24ea265ba66deb8b46bd0d6900dc5875957d3c3b16d769ec1"
+    },
+    {
+      "path": "vendor/modules.txt",
+      "mode": 420,
+      "sha256": "e4eb946d98f0bb03ffe6af9e6d1a3716efade8254616da0c8f76136fc6d9eda4"
+    }
+  ],
+  "verification_evidence": [
+    ".council/runs/20261125-query-history-01/verification/inspector-005/go-test.log",
+    ".council/runs/20261125-query-history-01/verification/inspector-005/browser.log"
+  ],
+  "status_before_after_sha256": "c3e1e51e7fe69d61e5769cb668fe102e95a9d187869e96cbfba9dea5cb15d2ff",
+  "index_diff_before_after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "verification": "Snapshots byte-compared with current files and SHA-256 verified; source status, index and HEAD unchanged."
+}

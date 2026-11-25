@@ -14,7 +14,8 @@ function applyTheme(theme) {
 }
 
 function getPreferredTheme() {
-  const savedTheme = localStorage.getItem(themeStorageKey);
+  let savedTheme;
+  try { savedTheme = localStorage.getItem(themeStorageKey); } catch (_) { /* Storage is optional. */ }
   if (savedTheme === "light" || savedTheme === "dark") {
     return savedTheme;
   }
@@ -24,7 +25,7 @@ function getPreferredTheme() {
 
 function ToggleTheme() {
   const theme = document.documentElement.classList.contains("dark") ? "light" : "dark";
-  localStorage.setItem(themeStorageKey, theme);
+  try { localStorage.setItem(themeStorageKey, theme); } catch (_) { /* Storage is optional. */ }
   applyTheme(theme);
 }
 

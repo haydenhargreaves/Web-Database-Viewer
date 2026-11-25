@@ -1,0 +1,7 @@
+FAIL Error: real Enter activates remove
+    at assert (http://127.0.0.1:34719/inspect.js:1:87)
+    at http://127.0.0.1:34719/inspect.js:14:386 completed ["actual selector loaded","special name DOM parsing","manual query recorded","actual query response ID","switch actual HTMX selector","separate B history","option/header synthetic sentinels excluded from storage","clear B","switch back restores A","actual auto editor swap","load after swap without POST","actual tree input triggers auto POST","manual works after swap","warning and clear present","clear visible","real Tab reaches remove: <button type=\"button\" class=\"p-2 border rounded-md focus:ring-2 focus:ring-blue-500\" aria-label=\"Remove query from 11/25/2026, 2:44:57 PM\">Remove</button>"]
+Browser failure 
+DevTools listening on ws://127.0.0.1:34085/devtools/browser/8a4c7092-62df-404f-932e-81d25ba9d12f
+[206017:206043:1125/144454.246145:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+

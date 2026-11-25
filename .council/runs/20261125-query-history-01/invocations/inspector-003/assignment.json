@@ -1,0 +1,74 @@
+{
+  "id": "inspector-003",
+  "agent": "council/inspector",
+  "stage": "IMPLEMENTATION_REVIEW",
+  "mode": "normal",
+  "purpose": "independent missing evidence verification only",
+  "plan": {
+    "revision": "v007",
+    "path": ".council/runs/20261125-query-history-01/plan/v007.md",
+    "fingerprint": "27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022",
+    "requirements": {
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v007.md",
+      "fingerprint": "7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f"
+    }
+  },
+  "pre_invocation_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "files": [
+      {
+        "status": " M",
+        "path": "internal/database/query.go",
+        "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+      },
+      {
+        "status": " M",
+        "path": "internal/templates/connections.go",
+        "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+      },
+      {
+        "status": " M",
+        "path": "web/static/scripts/theme.js",
+        "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+      },
+      {
+        "status": " M",
+        "path": "web/templates/index.html",
+        "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+      },
+      {
+        "status": "??",
+        "path": "internal/database/query_history_test.go",
+        "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+      },
+      {
+        "status": "??",
+        "path": "internal/templates/connections_history_test.go",
+        "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+      },
+      {
+        "status": "??",
+        "path": "web/static/scripts/query-history.js",
+        "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history-server.js",
+        "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.html",
+        "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.js",
+        "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+      }
+    ]
+  },
+  "report": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-003/report.md",
+  "evidence_dir": ".council/runs/20261125-query-history-01/verification/inspector-003",
+  "receipt_status": "pending"
+}

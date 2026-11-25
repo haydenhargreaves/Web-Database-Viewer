@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Query Tool</title>
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("theme");
+      const isDark = savedTheme ? savedTheme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+    }());
+  </script>
+  <link href="/v1/web/static/styles/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+  <link rel="icon" type="image/png" href="/v1/web/assets/favicon.ico">
+</head>
+
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+
+  <div class="flex flex-col h-screen">
+    <!-- Top Bar -->
+    <div class="bg-white shadow-md p-4 flex items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div>
+        <h1 class="text-2xl font-bold">Database Query Tool</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Connect and query your databases effortlessly.</p>
+      </div>
+      <div class="flex items-center justify-end space-x-4 flex-wrap">
+        <form hx-post="/v1/api/connections/connect" hx-trigger="change" hx-swap="outerHTML"
+          hx-target="#connected-database" hx-indicator="#table-loading" hx-encoding="multipart/form-data"
+          class="flex items-center justify-end space-x-2 flex-wrap">
+          <label for="connected-database" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Connected Database:</label>
+          <select hx-get="/v1/web/connections" hx-trigger="load" hx-swap="outerHTML" id="connected-database"
+            name="connected-database" hx-params="none"
+            class="mt-1 block p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
+        </form>
+        <button onclick="ShowModal();" class="bg-blue-500 text-white px-4 py-2 my-2 rounded-md text-sm md:text-base">
+          Add Connection
+        </button>
+        <button hx-get="/v1/web/manager/open" hx-trigger="click" hx-target="#manager-modal" hx-swap="outerHTML"
+          class="bg-blue-500 text-white px-4 py-2 my-2 rounded-md text-sm md:text-base">
+          Manage Connections
+        </button>
+        <button id="theme-toggle" type="button" onclick="ToggleTheme();" aria-pressed="false"
+          class="p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200 dark:hover:bg-gray-700"
+          title="Switch color mode">
+          <span class="sr-only">Toggle color mode</span>
+          <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36-6.36-.71.71M6.35 17.65l-.71.71m12.02 0-.71-.71M6.35 6.35l-.71-.71M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <svg class="hidden w-5 h-5 text-yellow-300 dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36-6.36-.71.71M6.35 17.65l-.71.71m12.02 0-.71-.71M6.35 6.35l-.71-.71M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row flex-grow min-h-0 md:overflow-hidden">
+      <!-- Sidebar -->
+      <div class="w-full md:w-1/4 bg-white shadow-md dark:bg-gray-800 md:flex md:flex-col md:min-h-0 md:overflow-hidden">
+        <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <h2 class="text-lg font-bold">
+            <span id="database-name-tree">database</span>
+          </h2>
+          <button hx-get="/v1/web/connections/tree" hx-trigger="click" hx-swap="none"
+            class="hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md" hx-indicator="#table-loading">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon h-4 w-4 dark:text-white" viewBox="0 0 512 512" fill="currentColor">
+              <path
+                d="M400 148l-21.12-24.57A191.43 191.43 0 00240 64C134 64 48 150 48 256s86 192 192 192a192.09 192.09 0 00181.07-128"
+                fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" />
+              <path
+                d="M464 97.42V208a16 16 0 01-16 16H337.42c-14.26 0-21.4-17.23-11.32-27.31L436.69 86.1C446.77 76 464 83.16 464 97.42z" />
+            </svg>
+          </button>
+        </div>
+        <div class="md:flex-1 md:min-h-0 md:overflow-y-auto">
+          <div class="p-4">
+            <button id="tree-section-toggle-tables" type="button" onclick="ToggleTreeSection('tables');"
+              aria-expanded="false" aria-controls="tree-section-tables"
+              class="w-full flex items-center justify-between border-b pb-4 pt-2 text-left">
+              <span class="flex items-center">
+                <svg id="tree-section-icon-tables" class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Tables</span>
+              </span>
+              <p id="table-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </button>
+            <div id="tree-section-tables" class="hidden" hx-get="/v1/web/connections/tree/table" hx-trigger="load"
+              hx-params="none" hx-indicator="#table-loading" hx-target="#database-table-tree">
+              <label for="table-search" class="sr-only">Search tables</label>
+              <input id="table-search" type="search" placeholder="Search tables" oninput="FilterTables(this.value);"
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+              <ul hx-swap-oob="outerHTML" id="database-table-tree" class="mt-4 space-y-2"></ul>
+              <p id="table-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching tables.</p>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <button id="tree-section-toggle-views" type="button" onclick="ToggleTreeSection('views');"
+              aria-expanded="false" aria-controls="tree-section-views"
+              class="w-full flex items-center justify-between border-b pb-4 pt-2 text-left">
+              <span class="flex items-center">
+                <svg id="tree-section-icon-views" class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Views</span>
+              </span>
+              <p id="view-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </button>
+            <div id="tree-section-views" class="hidden" hx-get="/v1/web/connections/tree/view" hx-trigger="load"
+              hx-params="none" hx-indicator="#view-loading" hx-target="#database-view-tree">
+              <label for="view-search" class="sr-only">Search views</label>
+              <input id="view-search" type="search" placeholder="Search views" oninput="FilterViews(this.value);"
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+              <ul hx-swap-oob="outerHTML" id="database-view-tree" class="mt-4 space-y-2"></ul>
+              <p id="view-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching views.</p>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <button id="tree-section-toggle-enums" type="button" onclick="ToggleTreeSection('enums');"
+              aria-expanded="false" aria-controls="tree-section-enums"
+              class="w-full flex items-center justify-between border-b pb-4 pt-2 text-left">
+              <span class="flex items-center">
+                <svg id="tree-section-icon-enums" class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Enums</span>
+              </span>
+              <p id="enum-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </button>
+            <div id="tree-section-enums" class="hidden" hx-get="/v1/web/connections/tree/enum" hx-trigger="load"
+              hx-params="none" hx-indicator="#enum-loading" hx-target="#database-enum-tree">
+              <ul hx-swap-oob="outerHTML" id="database-enum-tree" class="mt-4 space-y-2"></ul>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <button id="tree-section-toggle-routines" type="button" onclick="ToggleTreeSection('routines');"
+              aria-expanded="false" aria-controls="tree-section-routines"
+              class="w-full flex items-center justify-between border-b pb-4 pt-2 text-left">
+              <span class="flex items-center">
+                <svg id="tree-section-icon-routines" class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(-90)" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6"></path>
+                </svg>
+                <span class="text-lg text-gray-700 dark:text-gray-200">Procedures &amp; Functions</span>
+              </span>
+              <p id="routine-loading" class="text-xs font-light htmx-indicator">Loading...</p>
+            </button>
+            <div id="tree-section-routines" class="hidden" hx-get="/v1/web/connections/tree/routine" hx-trigger="load"
+              hx-params="none" hx-indicator="#routine-loading" hx-target="#database-routine-tree">
+              <label for="routine-search" class="sr-only">Search procedures and functions</label>
+              <input id="routine-search" type="search" placeholder="Search procedures and functions"
+                oninput="FilterRoutines(this.value);"
+                class="mt-4 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+              <ul hx-swap-oob="outerHTML" id="database-routine-tree" class="mt-4 space-y-2"></ul>
+              <p id="routine-search-empty" class="hidden mt-4 text-sm text-gray-500 dark:text-gray-400">No matching procedures or functions.</p>
+              <p id="routine-source-error" class="hidden mt-2 text-sm text-red-500" role="alert"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="w-full md:w-3/4 p-4 md:min-h-0 md:overflow-y-auto">
+        <main>
+          <!-- Query Input -->
+          <div id="query-main" class="mb-4">
+            <div class="flex items-center justify-between">
+              <label for="sql" class="block text-sm font-medium text-gray-700 dark:text-gray-200">SQL Query </label>
+              <div class="flex items-center space-x-6">
+                <form class="flex items-center space-x-2" hx-get="/v1/web/query/auto" hx-swap="outerHTML"
+                  hx-target="#query-main" hx-trigger="input">
+                  <label for="auto-toggle" class="text-sm font-medium text-gray-700 dark:text-gray-200">Auto-Run</label>
+                  <input type="checkbox" name="toggle" class="toggle-checkbox"
+                    title="Toggle auto-query functionality. Note: This will send whatever query is in the input and clear the box.">
+                </form>
+
+                <!-- Manual Query Button -->
+                <button hx-post="/v1/api/query" hx-trigger="click" hx-swap="outerHTML" hx-target="#query-results"
+                  hx-indicator="#spinner" hx-include="#sql"
+                  class="bg-blue-500 text-white py-2 px-3 rounded-md text-xs md:text-sm">Run Query</button>
+
+                <!-- Auto Query Button -->
+                <!-- <button class="bg-blue-500 text-white py-2 px-3 rounded-md text-xs md:text-sm opacity-60 cursor-default" title="Disable Auto-Run to use manual queries." disabled>Run Query</button> -->
+              </div>
+            </div>
+
+            <!-- Manual Query Input -->
+            <textarea id="sql" name="sql" rows="12"
+              class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"></textarea>
+
+            <!-- Auto Query Input -->
+            <!-- <textarea id="sql" name="sql" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" hx-post="/v1/api/query" hx-trigger="input delay:500ms" hx-swap="outerHTML" hx-target="#query-results" hx-indicator="#spinner"></textarea> -->
+
+            <p id="spinner" class="text-gray-700 dark:text-gray-300 text-sm px-1 py-2 htmx-indicator opacity-0"> Query running... </p>
+            <p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm hidden"></p>
+          </div>
+
+          <!-- Query Results -->
+          <ul id="query-results">
+            <!-- <li class="overflow-x-auto overflow-y-hidden bg-white rounded-lg shadow-md"> -->
+            <!--   <table class="min-w-full divide-y divide-gray-200"> -->
+            <!--     <thead class="bg-gray-50"> -->
+            <!--       <tr> -->
+            <!--         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">id</th> -->
+            <!--         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">username</th> -->
+            <!--         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">password</th> -->
+            <!--         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">secret</th> -->
+            <!--         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">permission</th> -->
+            <!--       </tr> -->
+            <!--     </thead> -->
+            <!--     <tbody class="bg-white divide-y divide-gray-200"> -->
+            <!--       <tr> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">513fbe25-ff69-4386-87c2-90ff6b691169</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">ConnieH</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">d1d15c321c523cbcfe2c18f92168cb5b:</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap"><nil></td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">Admin</td> -->
+            <!--       </tr> -->
+            <!--       <tr> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">5e02c767-f035-40da-867a-1c067c1678e2</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">AustinH</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">588b2205579a4ee48f9014f2742fd1b0:</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap"><nil></td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">User</td> -->
+            <!--       </tr> -->
+            <!--       <tr> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">1d007e19-d84b-4cc6-9e6b-1c51122aa3e5</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">Azpect</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">a8778398e9afed7f00a88b13ffc14a95:</td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap"><nil></td> -->
+            <!--         <td class="px-6 py-4 whitespace-nowrap">Dev</td> -->
+            <!--       </tr> -->
+            <!--     </tbody> -->
+            <!--   </table> -->
+            <!--   <p id="query-error" hx-swap-oob="outerHTML" class="text-red-500 py-2 text-sm hidden"></p> -->
+            <!-- </li> -->
+          </ul>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Connection Modal -->
+  <div id="connection-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden opacity-0">
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-2/3 dark:bg-gray-800">
+        <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
+          <h2 class="text-xl font-bold">Add New Connection</h2>
+          <button onclick="HideModal();" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="mt-4">
+          <form id="connection-form" class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="db-host" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Host</label>
+              <input id="db-host" name="db-host" type="text" placeholder="127.0.0.1"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+            </div>
+            <div>
+              <label for="db-port" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Port</label>
+              <input id="db-port" name="db-port" type="text" placeholder="5432"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+            </div>
+            <div>
+              <label for="db-username" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Username</label>
+              <input id="db-username" name="db-username" type="text" placeholder="admin"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+            </div>
+            <div>
+              <label for="db-password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+              <div class="relative mt-1">
+                <input id="db-password" name="db-password" type="password" placeholder="●●●●●●●●●"
+                  class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                <button type="button" id="togglePassword"
+                  class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 bg-gray-200 rounded-r-md border border-gray-300 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-200"
+                  title="Display secret details">
+                  <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s3.5-7 11-7 11 7 11 7-3.5 7-11 7S1 12 1 12z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label for="db-driver" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Driver/Type of Database</label>
+              <select id="db-driver" name="db-driver"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                <option value="postgres">PostgreSQL</option>
+                <option value="mysql">MySQL</option>
+                <option value="sqlite3">SQLite</option>
+                <option value="sqlserver">SQL Server</option>
+                <option value="oracle">Oracle</option>
+                <option value="mariadb">MariaDB</option>
+                <option value="db2">DB2</option>
+              </select>
+            </div>
+            <div>
+              <label for="db-database" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Database Name</label>
+              <input id="db-database" name="db-database" type="text" placeholder="master_database"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+            </div>
+            <div class="col-span-2">
+              <label for="db-url" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Connection Name
+                <br>
+                <span class="text-xs font-light">
+                  This is the name of the connection that will be displayed in the list of connections. By default it
+                  will match the database name.
+                </span>
+              </label>
+              <input name="db-conn-name" id="db-conn-name" placeholder="master_database"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+            </div>
+            <div class="col-span-2">
+              <label for="db-url" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Connection URL
+                <br>
+                <span class="text-xs font-light">
+                  The connection URL will be automatically generated based on the above fields. To view the URL
+                  generated,
+                  push the "display secret details" button in the password section.
+                  <br>
+                  When using SQLite, simply enter the file path to the database file on your system in the
+                  "Database Name" section.
+                </span>
+              </label>
+              <input id="db-url" name="db-url" type="password"
+                placeholder="postgresql://admin:password@127.0.0.1:5432/master_database"
+                value="postgresql://user:password@127.0.0.1:5432/database?sslmode=disable"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+              <span id="db-url-invalid" class="text-xs text-red-500 hidden">Connection URL is incomplete or
+                invalid.</span>
+            </div>
+          </form>
+          <div class="flex items-center space-x-4 mt-4">
+            <button hx-post="/v1/api/connections" hx-trigger="click" hx-target="#connected-database" hx-swap="outerHTML"
+              hx-include="#connection-form" hx-on::after-request="HideModal();"
+              class="bg-blue-500 text-white px-4 py-2 rounded-md">
+              Create Connection
+            </button>
+            <button hx-post="/v1/api/connections/test" hx-trigger="click" hx-swap="outerHTML"
+              hx-target="#connection-status" hx-include="#connection-form" hx-encoding="multipart/form-data"
+              class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center space-x-2 dark:bg-gray-700 dark:text-gray-100">
+              <span>Test Connection</span>
+              <span id="connection-status" class="w-3 h-3 rounded-full bg-gray-400"></span>
+            </button>
+            <span id="connection-message"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Connections Modal -->
+  <div id="manager-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden opacity-0"></div>
+
+  <!-- Scripts -->
+  <script src="/v1/web/static/scripts/password.js"></script>
+  <script src="/v1/web/static/scripts/connection-url.js"></script>
+  <script src="/v1/web/static/scripts/modal.js"></script>
+  <script src="/v1/web/static/scripts/tree.js"></script>
+  <script src="/v1/web/static/scripts/theme.js"></script>
+</body>
+
+</html>

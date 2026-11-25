@@ -1,0 +1,588 @@
+{
+  "schema_version": 1,
+  "run_id": "20261125-query-history-01",
+  "project_root": "/home/azpect/Documents/Projects/Web-Database-Viewer",
+  "worktree_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb"
+  },
+  "ticket_path": ".council/runs/20261125-query-history-01/ticket.md",
+  "ticket_fingerprint": "1e1b76898c0380a28d8f3ec5f79d7a9dc63f2e1a6e68e8568c390bb5e5a31624",
+  "created_at": "2026-11-25T19:36:10.347Z",
+  "updated_at": "2026-11-25T21:56:10.274Z",
+  "stage": "COMPLETED",
+  "status": "COMPLETED",
+  "last_verified_stage": "FINALIZING",
+  "pending_invocation": null,
+  "pause_requested": false,
+  "baseline_reference": ".council/runs/20261125-query-history-01/baseline.json",
+  "canonical_verification_contract": [
+    "GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off go test -mod=vendor -count=1 -v ./..."
+  ],
+  "requirements": {
+    "path": ".council/runs/20261125-query-history-01/plan/requirements-v007.md",
+    "fingerprint": "7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f"
+  },
+  "plan": {
+    "revision": "v007",
+    "path": ".council/runs/20261125-query-history-01/plan/v007.md",
+    "fingerprint": "27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022"
+  },
+  "approved_plan": {
+    "revision": "v007",
+    "path": ".council/runs/20261125-query-history-01/plan/v007.md",
+    "fingerprint": "27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022",
+    "requirements": {
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v007.md",
+      "fingerprint": "7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f"
+    }
+  },
+  "artifact_registry": [
+    {
+      "producer": "council/architect",
+      "invocation": "architect-002",
+      "purpose": "plan revision",
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v002.md",
+      "fingerprint": "5ba578e4cd41e1704674cc92a76590e016ea281fa209f303950d7f6e0f752112",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-002",
+      "purpose": "plan revision",
+      "path": ".council/runs/20261125-query-history-01/plan/v002.md",
+      "fingerprint": "ec02bd41d2f51f83db9de85fb58e0d24252a9670203f7ae77704e91bc8e371f6",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/critic",
+      "invocation": "critic-001",
+      "purpose": "independent plan review",
+      "path": ".council/runs/20261125-query-history-01/reviews/plan/critic-001/report.md",
+      "fingerprint": "498b32200f6e576b0b70cc4cd83a3e0864e92bd48f06b6e310d14e85a8603cd8",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-005",
+      "purpose": "plan v005",
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v005.md",
+      "fingerprint": "c876635b1d791b3a80dea91ddb783f72c6f6bba427d147b5599c51759e04e12a",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-005",
+      "purpose": "plan v005",
+      "path": ".council/runs/20261125-query-history-01/plan/v005.md",
+      "fingerprint": "fbf2fe149c0e32e3d3a939d841b0d5f5e029fc8a880e79a5d2e866b18853959e",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-006",
+      "purpose": "plan v006",
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v006.md",
+      "fingerprint": "5d0f39e23c2efa076c8e762fb99498c5a33fd87210e462cbdfb4e5cb338dbbf1",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-006",
+      "purpose": "plan v006",
+      "path": ".council/runs/20261125-query-history-01/plan/v006.md",
+      "fingerprint": "b545fb967d71800cb9da12a3b694be70061d22fc461cd4b5bbaf9354c7f3a486",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-007",
+      "purpose": "proportional verification revision",
+      "path": ".council/runs/20261125-query-history-01/plan/requirements-v007.md",
+      "fingerprint": "7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/architect",
+      "invocation": "architect-007",
+      "purpose": "proportional verification revision",
+      "path": ".council/runs/20261125-query-history-01/plan/v007.md",
+      "fingerprint": "27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/critic",
+      "invocation": "critic-004",
+      "purpose": "independent plan review",
+      "path": ".council/runs/20261125-query-history-01/reviews/plan/critic-004/report.md",
+      "fingerprint": "ddf2f3d840666df80922fec90471cac0b308a5dd2e9d446c248eed9bb13465cf",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/inspector",
+      "invocation": "inspector-002",
+      "purpose": "independent diagnostic",
+      "path": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-002/report.md",
+      "fingerprint": "7504ff927f3130426a3b73e0f2059883bda95e14676a6dab833655a1c1553647",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/inspector",
+      "invocation": "inspector-003",
+      "purpose": "independent diagnostic",
+      "path": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-003/report.md",
+      "fingerprint": "b12a05be2f9da744631f5667cdb43105e805a4a5b8b380df6e5555fd6a24496d",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/inspector",
+      "invocation": "inspector-004",
+      "purpose": "independent implementation review",
+      "path": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-004/report.md",
+      "fingerprint": "ca2e5436c26cd66e6891744f9a2a17a2edb4a29705e611ea1b298b1031ed1fd6",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/inspector",
+      "invocation": "inspector-005",
+      "purpose": "independent implementation review",
+      "path": ".council/runs/20261125-query-history-01/reviews/implementation/inspector-005/report.md",
+      "fingerprint": "0a34f9b319873e626ad3617adae43b7b3fa0072a1229b570aacb91a2f250e9ce",
+      "validation_status": "VALID"
+    },
+    {
+      "producer": "council/judge",
+      "invocation": "judge-001",
+      "purpose": "final review",
+      "path": ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md",
+      "fingerprint": "122ae2f395e694cfa2e53bc6ef7915b28f3c6cd4b06444bd2df1c7d3c1369700",
+      "validation_status": "VALID"
+    }
+  ],
+  "checkpoints": {
+    "S0": {
+      "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+      "status": "",
+      "scope_manifest": ".council/runs/20261125-query-history-01/checkpoints/s0-scope/manifest.json"
+    },
+    "S1": {
+      "manifest": ".council/runs/20261125-query-history-01/checkpoints/s1-001/manifest.json",
+      "fingerprint": "a29b47c68510beb50ca641ab60372cd3317720ecd3f9107f663c6fdd02dddaaf",
+      "identity": {
+        "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+        "files": [
+          {
+            "status": " M",
+            "path": "internal/database/query.go",
+            "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+          },
+          {
+            "status": " M",
+            "path": "internal/templates/connections.go",
+            "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+          },
+          {
+            "status": " M",
+            "path": "web/static/scripts/theme.js",
+            "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+          },
+          {
+            "status": " M",
+            "path": "web/templates/index.html",
+            "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+          },
+          {
+            "status": "??",
+            "path": "internal/database/query_history_test.go",
+            "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+          },
+          {
+            "status": "??",
+            "path": "internal/templates/connections_history_test.go",
+            "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+          },
+          {
+            "status": "??",
+            "path": "web/static/scripts/query-history.js",
+            "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history-server.js",
+            "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.html",
+            "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.js",
+            "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+          }
+        ]
+      }
+    },
+    "S2": {
+      "identity": {
+        "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+        "files": [
+          {
+            "status": " M",
+            "path": "internal/database/query.go",
+            "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+          },
+          {
+            "status": " M",
+            "path": "internal/templates/connections.go",
+            "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+          },
+          {
+            "status": " M",
+            "path": "web/static/scripts/theme.js",
+            "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+          },
+          {
+            "status": " M",
+            "path": "web/templates/index.html",
+            "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+          },
+          {
+            "status": "??",
+            "path": "internal/database/query_history_test.go",
+            "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+          },
+          {
+            "status": "??",
+            "path": "internal/templates/connections_history_test.go",
+            "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+          },
+          {
+            "status": "??",
+            "path": "web/static/scripts/query-history.js",
+            "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history-server.js",
+            "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.html",
+            "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.js",
+            "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+          }
+        ]
+      },
+      "mode": "NO_SAFE_CHANGES",
+      "evidence": ".council/runs/20261125-query-history-01/simplification/simplifier-002/report.md"
+    }
+  },
+  "current_observed_repository_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "files": [
+      {
+        "status": " M",
+        "path": "internal/database/query.go",
+        "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+      },
+      {
+        "status": " M",
+        "path": "internal/templates/connections.go",
+        "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+      },
+      {
+        "status": " M",
+        "path": "web/static/scripts/theme.js",
+        "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+      },
+      {
+        "status": " M",
+        "path": "web/templates/index.html",
+        "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+      },
+      {
+        "status": "??",
+        "path": "internal/database/query_history_test.go",
+        "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+      },
+      {
+        "status": "??",
+        "path": "internal/templates/connections_history_test.go",
+        "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+      },
+      {
+        "status": "??",
+        "path": "web/static/scripts/query-history.js",
+        "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history-server.js",
+        "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.html",
+        "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+      },
+      {
+        "status": "??",
+        "path": "web/tests/query-history.js",
+        "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+      }
+    ]
+  },
+  "approvals": {
+    "plan": {
+      "reviewer": "council/critic",
+      "invocation": "critic-004",
+      "verdict": "APPROVED",
+      "artifact_revision": "v007",
+      "evidence": [
+        ".council/runs/20261125-query-history-01/reviews/plan/critic-004/report.md"
+      ],
+      "current": true
+    },
+    "implementation": {
+      "reviewer": "council/inspector",
+      "invocation": "inspector-005",
+      "verdict": "APPROVED",
+      "artifact_revision": "v007",
+      "code_identity": {
+        "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+        "files": [
+          {
+            "status": " M",
+            "path": "internal/database/query.go",
+            "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+          },
+          {
+            "status": " M",
+            "path": "internal/templates/connections.go",
+            "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+          },
+          {
+            "status": " M",
+            "path": "web/static/scripts/theme.js",
+            "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+          },
+          {
+            "status": " M",
+            "path": "web/templates/index.html",
+            "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+          },
+          {
+            "status": "??",
+            "path": "internal/database/query_history_test.go",
+            "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+          },
+          {
+            "status": "??",
+            "path": "internal/templates/connections_history_test.go",
+            "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+          },
+          {
+            "status": "??",
+            "path": "web/static/scripts/query-history.js",
+            "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history-server.js",
+            "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.html",
+            "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.js",
+            "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+          }
+        ]
+      },
+      "evidence": [
+        ".council/runs/20261125-query-history-01/reviews/implementation/inspector-005/report.md"
+      ],
+      "current": true
+    },
+    "final": {
+      "reviewer": "council/judge",
+      "invocation": "judge-001",
+      "verdict": "APPROVED",
+      "artifact_revision": "v007",
+      "code_identity": {
+        "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+        "files": [
+          {
+            "status": " M",
+            "path": "internal/database/query.go",
+            "sha256": "b0a24097296b28ae225d4ab2ad79c1f3e64f2161d5fa4b4e4a3315d51a035ff7"
+          },
+          {
+            "status": " M",
+            "path": "internal/templates/connections.go",
+            "sha256": "a166a8451543296e9d6ff6c8abcd73cce9ba47b9baa39f24355dc23e62f94cd9"
+          },
+          {
+            "status": " M",
+            "path": "web/static/scripts/theme.js",
+            "sha256": "f1a39a41051d255191a4a8a04e92308feae6fc6dd319a1d4837bf530058dcff3"
+          },
+          {
+            "status": " M",
+            "path": "web/templates/index.html",
+            "sha256": "b58ed27b753e32e0f0735ab4ff00171360224de41dcf1defe3187ccaecdf3caa"
+          },
+          {
+            "status": "??",
+            "path": "internal/database/query_history_test.go",
+            "sha256": "7935784110a53f236e190f8dab25804e51e1f091726e4cce63db1ead71c6dc33"
+          },
+          {
+            "status": "??",
+            "path": "internal/templates/connections_history_test.go",
+            "sha256": "557c555800485f2955a1840c1d10283fa044f20f75765ebc23233aef4f2b6038"
+          },
+          {
+            "status": "??",
+            "path": "web/static/scripts/query-history.js",
+            "sha256": "e37e8e3d8f0fec6f15fae827d695b79d61b732b62b05c8444d39ae9182ce76e4"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history-server.js",
+            "sha256": "ad4dda5a362d42da64cf872a6d0474c3ba56db042575a960458367136c209792"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.html",
+            "sha256": "6437a99f69b94ccb205444ceee714f3ca88319af8cefb247df7fafc949794e19"
+          },
+          {
+            "status": "??",
+            "path": "web/tests/query-history.js",
+            "sha256": "38bfbf7180a17c50f363a7a561fa5a9704b95651b6b2eaa40c4705e3d09fb926"
+          }
+        ]
+      },
+      "evidence": [
+        ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md"
+      ],
+      "current": true
+    }
+  },
+  "findings": [
+    {
+      "id": "B-001",
+      "root_cause": "Inspector baseline-only requires a requirements revision",
+      "status": "RESOLVED",
+      "severity": "HIGH",
+      "requirement_ids": [
+        "AC9"
+      ],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/verification/baseline-003/baseline.md"
+      ]
+    },
+    {
+      "id": "ARCH-001",
+      "root_cause": "Exact HTMX 2.0.1 unavailable for browser verification",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "requirement_ids": [],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md"
+      ]
+    },
+    {
+      "id": "C001-1",
+      "root_cause": "Secure-context Web Crypto unavailable on remote HTTP",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "requirement_ids": [
+        "R-002"
+      ],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md"
+      ]
+    },
+    {
+      "id": "C001-2",
+      "root_cause": "Submissions during connection switching dropped or misattributed",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "requirement_ids": [
+        "R-001",
+        "R-002"
+      ],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md"
+      ]
+    },
+    {
+      "id": "C002-1",
+      "root_cause": "Parsed option text differs from exact connection name",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "requirement_ids": [
+        "R-002"
+      ],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/reviews/final/judge-001/report.md"
+      ]
+    },
+    {
+      "id": "P004-incomplete",
+      "root_cause": "Mandatory browser acceptance coverage remains incomplete after two remediation attempts",
+      "status": "RESOLVED",
+      "severity": "HIGH",
+      "requirement_ids": [
+        "R-001",
+        "R-002",
+        "R-003",
+        "R-004",
+        "R-005",
+        "R-006",
+        "R-007",
+        "R-008",
+        "R-009",
+        "R-010"
+      ],
+      "resolution_evidence": [
+        ".council/runs/20261125-query-history-01/reviews/implementation/inspector-005/report.md"
+      ]
+    }
+  ],
+  "counters": {
+    "plan_revisions": 6,
+    "implementation_revisions": 6,
+    "simplification_retries": 0,
+    "final_remediation_cycles": 0,
+    "member_invocations": 29,
+    "repeated_finding_attempts": {
+      "B-001": 2,
+      "P004-incomplete": 4
+    }
+  },
+  "limits": {
+    "plan_revisions": 8,
+    "implementation_revisions": 9,
+    "simplification_retries": 1,
+    "final_remediation_cycles": 2,
+    "member_invocations": 30
+  },
+  "unresolved_blockers": [],
+  "next_action": "developer review and integration",
+  "latest_event_sequence": 40,
+  "blocked_stage": "IMPLEMENTING",
+  "failed_stage": "IMPLEMENTATION_REVIEW"
+}

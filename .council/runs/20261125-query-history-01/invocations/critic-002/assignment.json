@@ -1,0 +1,21 @@
+{
+  "id": "critic-002",
+  "agent": "council/critic",
+  "stage": "PLAN_REVIEW",
+  "mode": "revision",
+  "plan": {
+    "revision": "v005",
+    "path": ".council/runs/20261125-query-history-01/plan/v005.md",
+    "fingerprint": "fbf2fe149c0e32e3d3a939d841b0d5f5e029fc8a880e79a5d2e866b18853959e"
+  },
+  "requirements": {
+    "path": ".council/runs/20261125-query-history-01/plan/requirements-v005.md",
+    "fingerprint": "c876635b1d791b3a80dea91ddb783f72c6f6bba427d147b5599c51759e04e12a"
+  },
+  "pre_invocation_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "status": ""
+  },
+  "report": ".council/runs/20261125-query-history-01/reviews/plan/critic-002/report.md",
+  "receipt_status": "pending"
+}

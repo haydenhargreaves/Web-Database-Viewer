@@ -1,0 +1,13 @@
+{
+  "id": "architect-005",
+  "agent": "council/architect",
+  "stage": "PLANNING",
+  "mode": "revision",
+  "requirements": ".council/runs/20261125-query-history-01/plan/requirements-v005.md",
+  "plan": ".council/runs/20261125-query-history-01/plan/v005.md",
+  "pre_invocation_identity": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "status": ""
+  },
+  "receipt_status": "pending"
+}

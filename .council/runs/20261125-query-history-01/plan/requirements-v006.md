@@ -1,0 +1,19 @@
+# Requirements v006 — run 20261125-query-history-01
+
+Sources: original `../ticket.md`, decisions `../clarifications.md`; S0/current `9ebc8c67e24c79392989eb533f98195370580feb`. This is a complete revision of v005; no requirements retired. Objective: review and reuse recent SQL per connection in this browser. Non-goals: named/pinned queries, folders, search, import/export, server history or synchronization, editor replacement and unrelated fixes. All requirements mandatory; implementation acceptance UNVERIFIED.
+
+| ID | Source | Observable acceptance | Verification |
+|---|---|---|---|
+| R-001 | Ticket; lost-response decision | Every manual or delayed Auto-Run submission with non-whitespace SQL and an available valid effective-connection response identifier adds exactly one entry with exact SQL, including SQL errors. Whitespace adds none. Lost or unidentifiable response may be omitted; never guess or retry SQL. | P-002/P-004 actual HTMX and failure/race cases |
+| R-002 | Ticket; effective-ID decision | Separate history for selected connection, restored on switch/reload; each request attributed to its server-resolved connection during switches and shared-cookie races. Display identifier must match request identifier for exact accepted name, including empty, entity-like, whitespace, Unicode and placeholder-like names; true placeholder/missing member unavailable. Supported HTTP and HTTPS. | P-001/P-002/P-004 server and browser identity cases |
+| R-003 | Ticket | Newest first with readable timestamp and query preview; complete multiline SQL accessible and loadable. | P-003/P-004 |
+| R-004 | Ticket | Selecting loads SQL without executing; select/remove/clear do not trigger even a pending delayed Auto-Run; later genuine input works. | P-003/P-004 actual HTMX timing |
+| R-005 | Ticket | Remove a single chosen entry or clear only current connection using accessible controls. | P-003/P-004 |
+| R-006 | Ticket | At most 50 entries per connection, newest retained; duplicate submissions remain distinct. | P-002/P-004 |
+| R-007 | Ticket and security consideration | localStorage keys use stable non-secret identifier; stored history data consists only of SQL and timestamp, no connection URL, password, result or other connection details as metadata. Visible warning that SQL may be sensitive and stored in browser; obvious clear action. | P-001/P-003/P-004 sentinel, XSS, UI |
+| R-008 | Ticket | Malformed or unavailable storage does not prevent querying or page usability; history may be unavailable. | P-003/P-004 storage failure cases |
+| R-009 | Ticket | Panel near editor/results supports light/dark themes, narrow widths, keyboard, meaningful labels and visible focus. | P-003/P-004 |
+| R-010 | Ticket; existing invariant; effective-ID decision | Preserve query behavior, session and selector semantics, tree input, toggles and existing Go tests; additive non-secret response identifier and option identifier only; no history endpoint or server history persistence. | P-001/P-004 Go and real HTMX regression |
+
+## Compatibility and assumptions
+Request-time SQL stays in memory until effective response identity established. Hash is deterministic and guessable, not encryption; same exact name shares history, including empty name when a real map member. Server-generated option identifier avoids parsing or hashing display text and URL values. Existing selector selection, value, form and duplicate-URL behavior remain; markup must safely preserve an option per accepted name without interpreting name as HTML. SQL can itself contain credentials; restriction is on added metadata, not altering SQL. localStorage is origin-scoped and cross-tab read-modify-write is not atomic; concurrent operations can overwrite one another; a pending response after clear can add later. Real HTMX and browser are verification prerequisites, not planning blockers. No unresolved product question.

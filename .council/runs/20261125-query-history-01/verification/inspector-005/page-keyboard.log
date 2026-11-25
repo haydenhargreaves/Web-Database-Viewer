@@ -1,0 +1,7 @@
+FAIL Error: real Tab reaches remove
+    at assert (http://127.0.0.1:44201/inspect.js:1:87)
+    at http://127.0.0.1:44201/inspect.js:14:161 completed ["actual selector loaded","special name DOM parsing","manual query recorded","actual query response ID","switch actual HTMX selector","separate B history","option/header synthetic sentinels excluded from storage","clear B","switch back restores A","actual auto editor swap","load after swap without POST","actual tree input triggers auto POST","manual works after swap","warning and clear present","clear visible"]
+Browser failure 
+DevTools listening on ws://127.0.0.1:43687/devtools/browser/5bce1958-5505-4402-a676-aa349e756b7b
+[205478:205504:1125/144432.978430:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "20261125-query-history-01",
+  "invocation_id": "baseline-001",
+  "agent_id": "council/inspector",
+  "stage": "BASELINING",
+  "status": "BLOCKED",
+  "inputs": {
+    "plan_revision": null,
+    "code_identity": "9ebc8c67e24c79392989eb533f98195370580feb"
+  },
+  "summary": "Baseline verification did not run because the required persisted requirements revision is missing.",
+  "artifacts": [
+    {
+      "path": ".council/runs/20261125-query-history-01/verification/baseline-001/baseline.md",
+      "purpose": "Partial blocked baseline report"
+    }
+  ],
+  "changed_files": [],
+  "requirements": [],
+  "findings": [],
+  "verification": [],
+  "assumptions": [],
+  "blockers": [
+    "No matching persisted requirements revision or legacy requirements.md exists in the run; state.json records requirements as null."
+  ],
+  "recommended_action": "Persist the matching requirements revision and assign a new baseline invocation."
+}

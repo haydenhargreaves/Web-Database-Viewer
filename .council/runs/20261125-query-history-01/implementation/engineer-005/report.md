@@ -1,0 +1,19 @@
+# Implementation report — engineer-005
+
+Run 20261125-query-history-01, revision invocation engineer-005. Status BLOCKED before application edits. Delegated input HEAD 9ebc8c67e24c79392989eb533f98195370580feb; observed HEAD unchanged, branch master. Approved plan v007 SHA-256 27db66662bacaadb9bd9cd34e3e836e5cc19a42c010de4837cb7c06628d55022 and matching requirements-v007.md SHA-256 7d96c2bc60e939721674e5ed50a6b2470c0447a91fec261cfe14d180db7d1c8f match critic-004 approval.
+
+## Blocker
+
+The approved plan requires the browser profile and manual evidence in a Council-assigned current-invocation verification directory. The delegation assigns `.council/runs/20261125-query-history-01/verification/engineer-005/`, but the higher-priority Engineer authority permits writing only assigned implementation artifacts and evidence under `.council/runs/20261125-query-history-01/implementation/engineer-005/`. The delegation does not assign that implementation directory for browser profile or manual evidence, and the approved plan specifically requires a current-invocation verification directory. Consequently there is no destination satisfying all applicable constraints. No browser profile or verification evidence was created; no substitute location was assumed. Council must reconcile the artifact policy and approved verification destination before continuation. Essential final browser verification cannot safely run under the current assignment.
+
+## Scope and state
+
+No application or test edits were made by this invocation; no rollback was needed. Status and SHA-256 of all ten feature files matched the supplied engineer-005 assignment. Four tracked application files remain modified and six feature/test files remain untracked, as listed in engineer-004's report; that report attributes them to previous Council implementation and identifies no original overlapping developer work. No staged application changes appeared in the observed status. The prior report describes feature changes relative to clean S0 and is incorporated by reference; no ownership was inferred solely from status. The invocation-specific report directory was absent and was created; no historical artifacts were knowingly modified. No application final verification was run after this invocation because of the blocker.
+
+## Requirements and matrix
+
+R-001 through R-010 remain UNVERIFIED for complete acceptance. The implementation and partial evidence mapping in engineer-004 report remains applicable to the matching ten input hashes, but is not a new acceptance determination. A1 and A9 were reported passing there; A2, A4, A5 and A8 were partial, A3, A6 and A7 not verified, and I1–I6 partial. This invocation did not execute A1–A9 or complete I1–I6. In particular, selector swap and isolation, actual styled keyboard/theme checks, swap/tree interaction, complete storage failure behavior and final canonical/browser reruns remain outstanding. The report does not claim independent closure of ARCH-001, C001-1, C001-2 or C002-1.
+
+## Verification and deviations
+
+Read-only identity checks: git root, HEAD, branch, application status and all ten feature hashes match the assignment; approved plan and requirements hashes match the review. The first identity shell command exited 127 because python3 was unavailable, after printing git status and both document hashes; a subsequent shell-only symlink and SHA-256 check exited 0. The report destination and its ancestors were checked for symlinks, the destination was absent, and its newly created parent was writable. Canonical Go suite: NOT RUN; browser fixture and manual checks: NOT RUN, due to the unresolved mandatory evidence/profile destination conflict. No baseline exception is asserted. No change in application behavior or test assertions, plan deviation, or new product defect was introduced. Previously documented non-atomic cross-tab updates, pending responses after clear, and duplicate-URL ambiguity remain.

@@ -1,0 +1,18 @@
+{
+  "S0": {
+    "head": "9ebc8c67e24c79392989eb533f98195370580feb",
+    "status": ""
+  },
+  "report": ".council/runs/20261125-query-history-01/verification/baseline-003/baseline.md",
+  "command": "GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off go test -mod=vendor -count=1 -v ./...",
+  "result": {
+    "command": "GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off go test -mod=vendor -count=1 -v ./...",
+    "cwd": "/home/azpect/Documents/Projects/Web-Database-Viewer",
+    "exit_code": 0,
+    "outcome": "PASS",
+    "evidence": "11 tests passed; no failures or reported skips; four packages had no test files."
+  },
+  "limitations": [
+    "Browser and container behavior unverified; Go 1.26.8 differs from go.mod Go 1.25.7"
+  ]
+}

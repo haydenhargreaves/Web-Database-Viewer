@@ -1,0 +1,7 @@
+{
+  "id": "baseline-002",
+  "agent": "council/inspector",
+  "mode": "baseline-only",
+  "report": ".council/runs/20261125-query-history-01/verification/baseline-002/baseline.md",
+  "receipt_status": "pending"
+}

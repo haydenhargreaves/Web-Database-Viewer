@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "20261125-query-history-01",
+  "invocation_id": "architect-002",
+  "agent_id": "council/architect",
+  "stage": "PLANNING",
+  "status": "PLANNED",
+  "inputs": {"plan_revision": "v002", "code_identity": "9ebc8c67e24c79392989eb533f98195370580feb"},
+  "summary": "Revision v002 requirements and implementation plan persisted and read back. Real HTMX verification remains mandatory and has not been executed.",
+  "artifacts": [{"path": ".council/runs/20261125-query-history-01/plan/requirements-v002.md", "purpose": "Requirements and acceptance criteria"}, {"path": ".council/runs/20261125-query-history-01/plan/v002.md", "purpose": "Implementation and verification plan"}],
+  "changed_files": [],
+  "requirements": [
+    {"id": "R-001", "status": "UNVERIFIED", "evidence": "P-003 and P-005"}, {"id": "R-002", "status": "UNVERIFIED", "evidence": "P-002 and P-005"}, {"id": "R-003", "status": "UNVERIFIED", "evidence": "P-003 and P-005"}, {"id": "R-004", "status": "UNVERIFIED", "evidence": "P-003 and real HTMX checks in P-005"}, {"id": "R-005", "status": "UNVERIFIED", "evidence": "P-003 and P-005"}, {"id": "R-006", "status": "UNVERIFIED", "evidence": "P-003 and P-005"}, {"id": "R-007", "status": "UNVERIFIED", "evidence": "P-002 and P-005"}, {"id": "R-008", "status": "UNVERIFIED", "evidence": "P-003 through P-005"}, {"id": "R-009", "status": "UNVERIFIED", "evidence": "P-004 and P-005"}, {"id": "R-010", "status": "UNVERIFIED", "evidence": "P-005 and canonical Go suite"}
+  ],
+  "findings": [{"id": "ARCH-001", "root_cause": "The application loads HTMX 2.0.1 remotely and no local verification copy was identified.", "severity": "HIGH", "blocking": false, "requirement_ids": ["R-004"], "location": "plan/v002.md, verification prerequisites and revision response", "evidence": "The clarification authorizes acquisition of the exact asset for verification; the plan specifies identity checks and actual delayed-input browser tests.", "impact": "Mandatory real HTMX acceptance verification remains pending.", "required_resolution": "Obtain and verify the authorized asset and execute the planned browser tests; reviewer retains authority to close the finding.", "verification_criteria": "Verify asset identity and test select, remove and clear during pending Auto-Run, followed by genuine input."}],
+  "verification": [],
+  "assumptions": ["Connection names are the existing session identity; name-derived storage keys are pseudonymous, not encrypted.", "Verification prerequisites can be obtained safely under the supplied authorization; acceptance checks are not waived."],
+  "blockers": [], "recommended_action": "Validate the persisted artifacts and request fresh Critic review."
+}

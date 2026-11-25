@@ -20,7 +20,10 @@ const maxQueryRows = 500
 
 func QueryCurrent(c *gin.Context) {
 	query := c.PostForm("sql")
-	conn, driver := getConnection(c)
+	conn, driver, name, member := queryConnectionIdentity(c)
+	if member {
+		c.Header("X-Query-History-Connection", templates.QueryHistoryID(name))
+	}
 
 	if query == "" {
 		c.String(200, templates.ErrorQueryResults(fmt.Errorf("No query provided")))
@@ -161,4 +164,23 @@ func getConnection(c *gin.Context) (url, driver string) {
 	}
 
 	return connections[curr][0], connections[curr][1]
+}
+
+// queryConnectionIdentity resolves both execution parameters and history identity
+// from the same request-session snapshot.
+func queryConnectionIdentity(c *gin.Context) (url, driver, name string, member bool) {
+	session := sessions.Default(c)
+	connBytes, _ := session.Get("connections").([]byte)
+	current, ok := session.Get("current").(string)
+	if !ok {
+		fmt.Println("No current connection")
+		return "", "", "", false
+	}
+	var connections map[string][2]string
+	if err := json.Unmarshal(connBytes, &connections); err != nil {
+		fmt.Println(err)
+		return "", "", "", false
+	}
+	data, ok := connections[current]
+	return data[0], data[1], current, ok
 }

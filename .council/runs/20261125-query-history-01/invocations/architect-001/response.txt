@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "run_id": "20261125-query-history-01",
+  "invocation_id": "architect-001",
+  "agent_id": "council/architect",
+  "stage": "PLANNING",
+  "status": "BLOCKED",
+  "inputs": {"plan_revision":"v001","code_identity":"9ebc8c67e24c79392989eb533f98195370580feb"},
+  "summary": "Planning is blocked because essential verification of delayed Auto-Run against the application's actual HTMX version cannot currently be performed offline.",
+  "artifacts": [], "changed_files": [], "requirements": [],
+  "findings": [{"id":"ARCH-001","root_cause":"The page loads HTMX 2.0.1 from a remote CDN; no local copy was found in the repository or searched local locations.","severity":"HIGH","blocking":true,"requirement_ids":[],"location":"web/templates/index.html:17; internal/templates/query.go:37","evidence":"Auto-Run uses HTMX input delay:500ms. Chromium and Node are installed, but the Inspector baseline does not exercise HTMX or browser behavior.","impact":"A simulated event test alone cannot establish that selecting, clearing, or removing history cancels or suppresses an already-scheduled real HTMX request.","required_resolution":"Provide an authorized, locally accessible copy of the exact HTMX 2.0.1 asset for offline browser verification, or establish another authorized verification environment with that asset.","verification_criteria":"Run an isolated browser test using actual HTMX 2.0.1, schedule an Auto-Run input, perform each history action before the delay expires, and verify no query request occurs after the delay."}],
+  "verification": [], "assumptions": [], "blockers": ["An authorized offline source or verification environment for the application's exact HTMX version is required."], "recommended_action": "Supply the HTMX verification prerequisite and re-invoke planning."
+}
